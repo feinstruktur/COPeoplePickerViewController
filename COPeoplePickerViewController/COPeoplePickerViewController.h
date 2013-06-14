@@ -10,6 +10,8 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
+extern NSString *const COPeoplePickerViewControllerVisibleHeightChanged;
+
 @protocol COPeoplePickerViewControllerDelegate;
 
 @interface COPeoplePickerViewController : UIViewController

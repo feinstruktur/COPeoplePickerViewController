@@ -13,6 +13,9 @@
 
 #define COSynth(x) @synthesize x = x##_;
 
+NSString *const COPeoplePickerViewControllerVisibleHeightChanged =
+@"COPeoplePickerViewControllerVisibleHeightChanged";
+
 // =============================================================================
 
 @class COTokenField;
@@ -212,7 +215,6 @@ COSynth(shadowLayer)
   self.tokenField = [[COTokenField alloc] initWithFrame:tokenFieldFrame];
   self.tokenField.tokenFieldDelegate = self;
   self.tokenField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-  [self.tokenField addObserver:self forKeyPath:kTokenFieldFrameKeyPath options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
   
   // Configure search table
   self.searchTableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
@@ -250,6 +252,8 @@ COSynth(shadowLayer)
                                 [NSNumber numberWithDouble:1.0], nil];
   
   [self.view.layer addSublayer:self.shadowLayer];
+  
+  [self.tokenField addObserver:self forKeyPath:kTokenFieldFrameKeyPath options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:nil];
   
   // Subscribe to keyboard notifications
   NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -294,7 +298,38 @@ COSynth(shadowLayer)
   
   CGFloat contentOffset = MAX(0, CGRectGetHeight(tokenFieldBounds) - CGRectGetHeight(self.tokenFieldScrollView.bounds));
   [self.tokenFieldScrollView setContentOffset:CGPointMake(0, contentOffset) animated:YES];
+  
+  CGFloat height = [self visibleHeight];
+  
+  [[NSNotificationCenter defaultCenter]
+   postNotificationName:COPeoplePickerViewControllerVisibleHeightChanged
+   object:self
+   userInfo:@{@"height" : [NSNumber numberWithFloat:height]}];
 }
+
+- (CGFloat)visibleHeight
+{
+  CGFloat height = self.tokenField.frame.size.height;
+  
+  if (!self.searchTableView.hidden) {
+    height += self.searchTableView.frame.size.height;
+  }
+  
+  return height;
+}
+
+- (void)hideSearchTableView:(BOOL)hidden
+{
+  self.searchTableView.hidden = hidden;
+  
+  CGFloat height = [self visibleHeight];
+  
+  [[NSNotificationCenter defaultCenter]
+   postNotificationName:COPeoplePickerViewControllerVisibleHeightChanged
+   object:self
+   userInfo:@{@"height" : [NSNumber numberWithFloat:height]}];
+}
+
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 #pragma unused (object, change, context)
@@ -457,6 +492,7 @@ static NSString *kCORecordRef = @"record";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   COEmailTableCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
   [self.tokenField processToken:cell.emailAddressLabel.text associatedRecord:cell.associatedRecord];
+  [self hideSearchTableView:YES];
 }
 
 @end
