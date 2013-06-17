@@ -53,24 +53,6 @@ ABPeoplePickerNavigationControllerDelegate> {
 @synthesize discreteSearchResults = _discreteSearchResults;
 @synthesize shadowLayer = _shadowLayer;
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        [self initializeAddressBook];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        [self initializeAddressBook];
-    }
-    return self;
-}
-
 - (void)initializeAddressBook
 {
     keyboardFrame_ = CGRectNull;
@@ -81,9 +63,16 @@ ABPeoplePickerNavigationControllerDelegate> {
     // Filed rdar://10526251
     //
     
-    CFErrorRef error;
+    CFErrorRef error = NULL;
     addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
     
+    if (error != NULL) {
+        [[[UIAlertView alloc] initWithTitle:@"Oups!"
+                                   message:@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts."
+                                  delegate:nil
+                         cancelButtonTitle:@"OK"
+                         otherButtonTitles:nil] show];
+    }
 }
 
 - (void)dealloc
@@ -125,10 +114,10 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewDidLoad
 {
-    
-    NSAssert(addressBook_,
-             @"The address book not initialized. "
-             "Make sure the initializeAddressBook method is called.");
+    [self initializeAddressBook];
+//    NSAssert(addressBook_,
+//             @"The address book not initialized. "
+//             "Make sure the initializeAddressBook method is called.");
     
     // Configure content view
     self.view.backgroundColor = [UIColor colorWithRed:0.859
