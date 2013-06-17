@@ -249,9 +249,7 @@ ABPeoplePickerNavigationControllerDelegate> {
                                        CGRectGetMaxY(self.tokenFieldScrollView.frame),
                                        CGRectGetWidth(bounds),
                                        CGRectGetMinY(keyboardFrame) - CGRectGetMaxY(self.tokenFieldScrollView.frame));
-        [UIView animateWithDuration:0.25 animations:^{
-            self.searchTableView.frame = tableFrame;
-        }];
+        self.searchTableView.frame = tableFrame;
     }
     
     self.shadowLayer.frame = CGRectMake(0, CGRectGetMaxY(self.tokenFieldScrollView.frame), CGRectGetWidth(bounds), kTokenFieldShadowHeight);
