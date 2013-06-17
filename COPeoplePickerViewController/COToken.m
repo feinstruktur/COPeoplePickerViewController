@@ -110,8 +110,8 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     
     [self.title drawInRect:titleFrame
                   withFont:titleFont
-             lineBreakMode:UILineBreakModeTailTruncation
-                 alignment:UITextAlignmentCenter];
+             lineBreakMode:NSLineBreakByTruncatingTail
+                 alignment:NSTextAlignmentCenter];
 }
 
 - (NSString *)description

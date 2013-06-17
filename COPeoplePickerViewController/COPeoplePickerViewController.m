@@ -80,11 +80,17 @@ ABPeoplePickerNavigationControllerDelegate> {
     //
     // Filed rdar://10526251
     //
-    addressBook_ = ABAddressBookCreate();
+    
+    CFErrorRef error;
+    addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
+    
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.tokenField removeObserver:self forKeyPath:kTokenFieldFrameKeyPath];
+    
     if (addressBook_ != NULL) {
         CFRelease(addressBook_);
         addressBook_ = NULL;
@@ -300,12 +306,6 @@ ABPeoplePickerNavigationControllerDelegate> {
     }
 }
 
-- (void)viewDidUnload
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.tokenField removeObserver:self forKeyPath:kTokenFieldFrameKeyPath];
-}
-
 - (NSArray *)selectedRecords
 {
     NSMutableArray *map = [NSMutableArray new];
@@ -348,7 +348,9 @@ ABPeoplePickerNavigationControllerDelegate> {
         picker.navigationBar.tintColor = tintColor;
     }
     
-    [self presentModalViewController:picker animated:YES];
+    [self presentViewController:picker
+                       animated:YES
+                     completion:nil];
 }
 
 - (ABAddressBookRef)addressBookForTokenField:(COTokenField *)tokenField
@@ -424,15 +426,16 @@ static NSString *kCORecordRef = @"record";
     COPerson *record = [[COPerson alloc] initWithABRecordRef:person];
     
     [self.tokenField processToken:email associatedRecord:record];
-    [self dismissModalViewControllerAnimated:YES];
-    
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
     return NO;
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
 {
 #pragma unused (peoplePicker)
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
