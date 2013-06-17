@@ -53,15 +53,9 @@ ABPeoplePickerNavigationControllerDelegate> {
 @synthesize discreteSearchResults = _discreteSearchResults;
 @synthesize shadowLayer = _shadowLayer;
 
-- (void)initializeAddressBook
+- (void)initialiseAddressBook
 {
     keyboardFrame_ = CGRectNull;
-    // DEVNOTE: A workaround to force initialization of ABPropertyIDs.
-    // If we don't create the address book here and try to set |displayedProperties| first
-    // all ABPropertyIDs will default to '0'.
-    //
-    // Filed rdar://10526251
-    //
     
     CFErrorRef error = NULL;
     addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
@@ -72,6 +66,8 @@ ABPeoplePickerNavigationControllerDelegate> {
                                   delegate:nil
                          cancelButtonTitle:@"OK"
                          otherButtonTitles:nil] show];
+    } else {
+        ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
     }
 }
 
@@ -114,10 +110,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewDidLoad
 {
-    [self initializeAddressBook];
-//    NSAssert(addressBook_,
-//             @"The address book not initialized. "
-//             "Make sure the initializeAddressBook method is called.");
+    [self initialiseAddressBook];
     
     // Configure content view
     self.view.backgroundColor = [UIColor colorWithRed:0.859
