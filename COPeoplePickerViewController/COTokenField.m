@@ -11,6 +11,8 @@
 #import "COPerson.h"
 #import "CORecordEmail.h"
 
+const CGFloat kTokenFieldShadowHeight = 14.0;
+
 @implementation COTokenField
 
 @synthesize tokenFieldDelegate = _tokenFieldDelegate;
@@ -109,29 +111,32 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void)layoutSubviews {
     NSUInteger row = 0;
-    NSInteger tokenCount = (NSInteger)self.tokens.count;
     
-    CGFloat left = kTokenFieldPaddingX;
-    CGFloat maxLeft = CGRectGetWidth(self.bounds) - (CGFloat)kTokenFieldPaddingX;
-    if (row == 0) {
-        maxLeft -= self.hintLabel.frame.size.width;
-    }
+    // span of the free space in the last row
+    CGFloat left = self.hintLabel.frame.size.width + self.hintLabel.frame.origin.x;
+    CGFloat right =
+    self.frame.size.width -
+    CGRectGetWidth(self.addContactButton.frame) -
+    kTokenFieldPaddingX;
+    
     CGFloat rowHeight = self.computedRowHeight;
     
-    for (NSInteger i=0; i<tokenCount; i++) {
-        COToken *token = (self.tokens)[(NSUInteger)i];
-        CGFloat right = left + CGRectGetWidth(token.bounds);
-        if (right > maxLeft) {
+    for (COToken *token in self.tokens) {
+        
+        CGFloat tokenRight = left + CGRectGetWidth(token.bounds);
+        if (tokenRight > right) {
             row++;
             left = kTokenFieldPaddingX;
         }
         
         // Adjust token frame
         CGRect tokenFrame = token.frame;
-        tokenFrame.origin = CGPointMake(left, (CGFloat)row * rowHeight + (rowHeight - CGRectGetHeight(tokenFrame)) / 2.0f + (CGFloat)kTokenFieldPaddingY);
-        if (row == 0) {
-            tokenFrame.origin.x += self.hintLabel.frame.size.width;
-        }
+        tokenFrame.origin.x = left;
+        tokenFrame.origin.y =
+        row * rowHeight +
+        (rowHeight - CGRectGetHeight(tokenFrame)) / 2.0f +
+        kTokenFieldPaddingY;
+        
         token.frame = tokenFrame;
         
         left += CGRectGetWidth(tokenFrame) + kTokenFieldPaddingX;
@@ -139,27 +144,32 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         [self addSubview:token];
     }
     
-    CGFloat maxLeftWithButton = maxLeft - (CGFloat)kTokenFieldPaddingX - CGRectGetWidth(self.addContactButton.frame);
-    if (maxLeftWithButton - left < 50) {
+    if (right - left < 50) {
         row++;
         left = kTokenFieldPaddingX;
     }
     
+    // adjust the text field frame
     CGRect textFieldFrame = self.textField.frame;
-    textFieldFrame.origin = CGPointMake(left, (CGFloat)row * rowHeight + (rowHeight - CGRectGetHeight(textFieldFrame)) / 2.0f + (CGFloat)kTokenFieldPaddingY);
-    textFieldFrame.size = CGSizeMake(maxLeftWithButton - left, CGRectGetHeight(textFieldFrame));
-    self.textField.frame = textFieldFrame;
-    if (row == 0) {
-        
-        CGRect    frame = self.textField.frame;
-        frame.origin.x += self.hintLabel.frame.size.width;
-        frame.size.width -= self.hintLabel.frame.size.width;
-        self.textField.frame = frame;
-    }
     
+    textFieldFrame.origin.x = left;
+    textFieldFrame.origin.y =
+    row * rowHeight +
+    (rowHeight - CGRectGetHeight(textFieldFrame)) / 2.0f +
+    kTokenFieldPaddingY;
+    
+    textFieldFrame.size = CGSizeMake(right - left,
+                                     CGRectGetHeight(textFieldFrame));
+    
+    self.textField.frame = textFieldFrame;
+    
+    // adjust the height of the self
     CGRect tokenFieldFrame = self.frame;
-    CGFloat minHeight = MAX(rowHeight, CGRectGetHeight(self.addContactButton.frame) + (CGFloat)kTokenFieldPaddingY * 2.0f);
-    tokenFieldFrame.size.height = MAX(minHeight, CGRectGetMaxY(textFieldFrame) + (CGFloat)kTokenFieldPaddingY);
+    CGFloat minHeight = MAX(rowHeight,
+                            CGRectGetHeight(self.addContactButton.frame) + kTokenFieldPaddingY * 2.0f);
+    
+    tokenFieldFrame.size.height = MAX(minHeight,
+                                      CGRectGetMaxY(textFieldFrame) + kTokenFieldPaddingY);
     
     self.frame = tokenFieldFrame;
 }

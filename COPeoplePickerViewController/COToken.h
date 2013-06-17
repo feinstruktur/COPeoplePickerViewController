@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+extern const CGFloat kTokenFieldFontSize;
+extern const CGFloat kTokenFieldTokenHeight;
+extern const CGFloat kTokenFieldPaddingX;
+extern const CGFloat kTokenFieldPaddingY;
+
 @class COTokenField;
 
 @interface COToken : UIButton

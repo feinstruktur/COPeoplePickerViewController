@@ -17,6 +17,9 @@
 #import "CORecord.h"
 #import "COPerson.h"
 #import "COEmailTableCell.h"
+#import "CORecordEmail.h"
+
+#define kTokenFieldFrameKeyPath @"frame"
 
 NSString *const COPeoplePickerViewControllerVisibleHeightChanged =
 @"COPeoplePickerViewControllerVisibleHeightChanged";

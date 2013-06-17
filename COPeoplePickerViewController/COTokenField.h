@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 
+extern const CGFloat kTokenFieldShadowHeight;
+
 @class COTokenField;
 @class COToken;
 @class COPerson;
@@ -22,14 +24,6 @@
 - (void)tokenField:(COTokenField *)tokenField searchingModeChanged:(BOOL)isInSearchingMode;
 
 @end
-
-#define kTokenFieldFontSize 14.0
-#define kTokenFieldPaddingX 6.0
-#define kTokenFieldPaddingY 6.0
-#define kTokenFieldTokenHeight (kTokenFieldFontSize + 4.0)
-#define kTokenFieldMaxTokenWidth 260.0
-#define kTokenFieldFrameKeyPath @"frame"
-#define kTokenFieldShadowHeight 14.0
 
 @interface COTokenField : UIView <UITextFieldDelegate>
 @property (nonatomic, weak) id<COTokenFieldDelegate> tokenFieldDelegate;
