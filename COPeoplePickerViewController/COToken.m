@@ -41,6 +41,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.frame = (CGRect){CGPointZero, tokenSize};
     token.titleLabel.font = font;
     token.title = title;
+    token.accessibilityLabel = token.title;
     
     return token;
 }
