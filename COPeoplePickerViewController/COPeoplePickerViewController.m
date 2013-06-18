@@ -62,7 +62,7 @@ ABPeoplePickerNavigationControllerDelegate> {
     
     if (error != NULL) {
         [[[UIAlertView alloc] initWithTitle:@"Oups!"
-                                   message:@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts."
+                                    message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
                                   delegate:nil
                          cancelButtonTitle:@"OK"
                          otherButtonTitles:nil] show];
@@ -124,7 +124,8 @@ ABPeoplePickerNavigationControllerDelegate> {
     
     self.tokenField = [[COTokenField alloc] initWithFrame:tokenFieldFrame];
     self.tokenField.tokenFieldDelegate = self;
-    self.tokenField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
+    self.tokenField.autoresizingMask =
+    UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     
     // Configure search table
     self.searchTableView =
@@ -139,7 +140,8 @@ ABPeoplePickerNavigationControllerDelegate> {
     self.searchTableView.dataSource = self;
     self.searchTableView.delegate = self;
     self.searchTableView.hidden = YES;
-    self.searchTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    self.searchTableView.autoresizingMask =
+    UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     // Create the scroll view
     self.tokenFieldScrollView =
@@ -148,6 +150,8 @@ ABPeoplePickerNavigationControllerDelegate> {
                                                    CGRectGetWidth(viewBounds),
                                                    self.tokenField.computedRowHeight)];
     self.tokenFieldScrollView.backgroundColor = [UIColor whiteColor];
+    self.tokenFieldScrollView.autoresizingMask =
+    UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     
     [self.view addSubview:self.searchTableView];
     [self.view addSubview:self.tokenFieldScrollView];

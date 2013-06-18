@@ -86,7 +86,6 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     frame.size.height = self.textField.frame.size.height;
     frame.size.width += 5;
     hintLabel.frame = frame;
-    //[self layoutSubviews];
 }
 
 - (NSString *)hint
