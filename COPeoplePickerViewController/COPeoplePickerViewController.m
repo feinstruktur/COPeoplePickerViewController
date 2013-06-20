@@ -56,19 +56,35 @@ ABPeoplePickerNavigationControllerDelegate> {
 - (void)initialiseAddressBook
 {
     keyboardFrame_ = CGRectNull;
-    
-    CFErrorRef error = NULL;
-    addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
-    
-    if (error != NULL) {
-        [[[UIAlertView alloc] initWithTitle:@"Oups!"
-                                    message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
-                                  delegate:nil
-                         cancelButtonTitle:@"OK"
-                         otherButtonTitles:nil] show];
-    } else {
-        ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
+
+    if (ABAddressBookCreateWithOptions != NULL) {
+        
+        CFErrorRef error = NULL;
+        addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
+        if (error != NULL) {
+            [[[UIAlertView alloc] initWithTitle:@"Oups!"
+                                        message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+        } else {
+            ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
+        }
+        
+    } else { // remove this case when requiring iOS 6
+        
+        addressBook_ = ABAddressBookCreate();
+        
+        if (addressBook_ == NULL) {
+            [[[UIAlertView alloc] initWithTitle:@"Oups!"
+                                        message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+        }
+        
     }
+
 }
 
 - (void)dealloc
