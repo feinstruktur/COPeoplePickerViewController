@@ -118,7 +118,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<%@ title: '%@'; associatedObj: '%@'>",
-            NSStringFromClass(isa), self.title, self.associatedObject];
+            NSStringFromClass([self class]), self.title, self.associatedObject];
 }
 
 @end

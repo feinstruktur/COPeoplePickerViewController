@@ -25,7 +25,7 @@
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@ title: '%@'; person: '%@'>",
-            NSStringFromClass(isa), self.title, self.person];
+            NSStringFromClass([self class]), self.title, self.person];
 }
 
 @end

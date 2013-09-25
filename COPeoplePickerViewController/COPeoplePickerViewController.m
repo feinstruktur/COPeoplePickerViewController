@@ -72,8 +72,9 @@ ABPeoplePickerNavigationControllerDelegate> {
         }
         
     } else { // remove this case when requiring iOS 6
-        
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
         addressBook_ = ABAddressBookCreate();
+#endif
         
         if (addressBook_ == NULL) {
             [[[UIAlertView alloc] initWithTitle:@"Oups!"
