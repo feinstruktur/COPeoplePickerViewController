@@ -125,8 +125,10 @@ ABPeoplePickerNavigationControllerDelegate> {
     self.navigationItem.rightBarButtonItem = rightItem;
 }
 
+#define IOS7_OFFSET 20
 - (void)viewDidLoad
 {
+    self.wantsFullScreenLayout = YES;
     [self initialiseAddressBook];
     
     // Configure content view
@@ -161,12 +163,8 @@ ABPeoplePickerNavigationControllerDelegate> {
     UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     
     // Create the scroll view
-    self.tokenFieldScrollView =
-    [[UIScrollView alloc] initWithFrame:CGRectMake(0,
-                                                   0,
-                                                   CGRectGetWidth(viewBounds),
-                                                   self.tokenField.computedRowHeight)];
-    self.tokenFieldScrollView.backgroundColor = [UIColor whiteColor];
+    self.tokenFieldScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, IOS7_OFFSET, CGRectGetWidth(viewBounds), self.tokenField.computedRowHeight)];
+    self.tokenFieldScrollView.backgroundColor = [UIColor orangeColor];
     self.tokenFieldScrollView.autoresizingMask =
     UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     
@@ -199,10 +197,11 @@ ABPeoplePickerNavigationControllerDelegate> {
                          context:nil];
     
     // Subscribe to keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
 }
 
 - (void)setHint:(NSString *)hint
@@ -234,18 +233,16 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     CGRect bounds = self.view.bounds;
     CGRect tokenFieldBounds = self.tokenField.bounds;
-    CGRect tokenScrollBounds = tokenFieldBounds;
+    CGRect tokenScrollBounds = CGRectMake(0, IOS7_OFFSET, tokenFieldBounds.size.width, tokenFieldBounds.size.height);
     
     self.tokenFieldScrollView.contentSize = tokenFieldBounds.size;
     
     CGFloat maxHeight = [self.tokenField heightForNumberOfRows:5];
     if (!self.searchTableView.hidden) {
-        tokenScrollBounds = CGRectMake(0, 0,
-                                       CGRectGetWidth(bounds),
-                                       [self.tokenField heightForNumberOfRows:1]);
+        tokenScrollBounds = CGRectMake(0, IOS7_OFFSET, CGRectGetWidth(bounds), [self.tokenField heightForNumberOfRows:1]);
     }
     else if (CGRectGetHeight(tokenScrollBounds) > maxHeight) {
-        tokenScrollBounds = CGRectMake(0, 0,
+        tokenScrollBounds = CGRectMake(0, IOS7_OFFSET,
                                        CGRectGetWidth(bounds), maxHeight);
     }
     [UIView animateWithDuration:0.25 animations:^{

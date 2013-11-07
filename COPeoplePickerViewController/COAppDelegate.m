@@ -27,6 +27,7 @@
     COPeoplePickerViewController *picker = [COPeoplePickerViewController new];
     
     picker.displayedProperties = @[@(kABPersonEmailProperty)];
+    [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleBlackTranslucent];
     
     self.window.rootViewController = picker;
     picker.hint = @"To:";
