@@ -44,7 +44,7 @@
 }
 
 - (void)adjustLabels {
-    CGSize emailLabelSize = [self.emailLabelLabel.text sizeWithFont:self.emailLabelLabel.font];
+    CGSize emailLabelSize = [self.emailLabelLabel.text sizeWithAttributes:@{NSFontAttributeName:self.emailLabelLabel.font}];
     CGFloat leftInset = 8;
     CGFloat yInset = 4;
     CGFloat labelWidth = emailLabelSize.width;
