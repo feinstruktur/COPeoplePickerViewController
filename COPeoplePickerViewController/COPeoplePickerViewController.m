@@ -128,7 +128,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 #define IOS7_OFFSET 20
 - (void)viewDidLoad
 {
-    self.wantsFullScreenLayout = YES;
+    // deprecated in iOS7 self.wantsFullScreenLayout = YES;
     [self initialiseAddressBook];
     
     // Configure content view

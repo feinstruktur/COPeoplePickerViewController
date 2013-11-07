@@ -31,7 +31,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.backgroundColor = [UIColor clearColor];
     
     UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
-    CGSize tokenSize = [title sizeWithFont:font];
+    CGSize tokenSize = [title sizeWithAttributes:@{NSFontAttributeName:font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
     
@@ -103,13 +103,16 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     }
     
     UIFont *titleFont = [UIFont systemFontOfSize:kTokenFieldFontSize];
-    CGSize titleSize = [self.title sizeWithFont:titleFont];
+    CGSize titleSize = [self.title sizeWithAttributes:@{NSFontAttributeName:titleFont}];
     CGRect titleFrame = CGRectMake((CGRectGetWidth(self.bounds) - titleSize.width) / 2.0f,
                                    (CGRectGetHeight(self.bounds) - titleSize.height) / 2.0f,
                                    titleSize.width,
                                    titleSize.height);
     
-    [self.title drawInRect:titleFrame withFont:titleFont lineBreakMode:NSLineBreakByTruncatingTail alignment:NSTextAlignmentCenter];
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    [self.title drawInRect:titleFrame withAttributes:@{NSFontAttributeName:titleFont,  NSParagraphStyleAttributeName:paragraphStyle}];
 }
 
 - (NSString *)description
