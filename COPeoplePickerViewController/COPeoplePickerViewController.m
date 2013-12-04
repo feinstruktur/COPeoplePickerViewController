@@ -19,6 +19,9 @@
 #import "COEmailTableCell.h"
 #import "CORecordEmail.h"
 
+#import "UIFont+Avalon.h"
+#import "UIColor+Blinkbox.h"
+
 #define kTokenFieldFrameKeyPath @"frame"
 
 NSString *const COPeoplePickerViewControllerVisibleHeightChanged =
@@ -209,6 +212,8 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     UILabel *hintLabel = self.tokenField.hintLabel;
     hintLabel.text = hint;
+    hintLabel.font = [UIFont avalonBookFontOfSize:15];
+    hintLabel.textColor = [UIColor blinkboxDarkGrey];
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
