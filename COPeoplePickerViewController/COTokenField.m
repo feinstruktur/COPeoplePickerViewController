@@ -11,6 +11,8 @@
 #import "COPerson.h"
 #import "CORecordEmail.h"
 
+#import "UIFont+Avalon.h"
+
 const CGFloat kTokenFieldShadowHeight = 14.0;
 
 @implementation COTokenField
@@ -53,7 +55,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                                                        textFieldHeight)];
         self.textField.opaque = NO;
         self.textField.backgroundColor = [UIColor clearColor];
-        self.textField.font = [UIFont systemFontOfSize:kTokenFieldFontSize];
+        self.textField.font = [UIFont avalonBookFontOfSize:kTokenFieldFontSize];
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.text = kCOTokenFieldDetectorString;

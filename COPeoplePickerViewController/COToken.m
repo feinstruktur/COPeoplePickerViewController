@@ -9,6 +9,8 @@
 #import "COToken.h"
 #import "COTokenField.h"
 
+#import "UIFont+Avalon.h"
+
 const CGFloat kTokenFieldFontSize = 14.0;
 static const CGFloat kTokenFieldMaxTokenWidth = 260.0;
 const CGFloat kTokenFieldTokenHeight = (kTokenFieldFontSize + 4.0);
@@ -30,7 +32,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.container = container;
     token.backgroundColor = [UIColor clearColor];
     
-    UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
+    UIFont *font = [UIFont avalonBookFontOfSize:14];
     CGSize tokenSize = [title sizeWithFont:font];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
@@ -102,7 +104,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
         [[UIColor blackColor] set];
     }
     
-    UIFont *titleFont = [UIFont systemFontOfSize:kTokenFieldFontSize];
+    UIFont *titleFont = [UIFont avalonBookFontOfSize:14];
     CGSize titleSize = [self.title sizeWithFont:titleFont];
     CGRect titleFrame = CGRectMake((CGRectGetWidth(self.bounds) - titleSize.width) / 2.0f,
                                    (CGRectGetHeight(self.bounds) - titleSize.height) / 2.0f,
