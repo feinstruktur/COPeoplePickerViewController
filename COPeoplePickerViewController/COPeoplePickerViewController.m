@@ -19,6 +19,7 @@
 #import "COEmailTableCell.h"
 #import "CORecordEmail.h"
 
+#import "UIDevice+We7.h"
 #import "UIFont+Avalon.h"
 #import "UIColor+Blinkbox.h"
 
@@ -218,7 +219,7 @@ ABPeoplePickerNavigationControllerDelegate> {
     
     CGRect frame = hintLabel.frame;
     frame.origin = CGPointMake(kTokenFieldPaddingX, kTokenFieldPaddingY);
-    frame.size.height = self.tokenField.textField.frame.size.height;
+    frame.size.height = self.tokenField.textField.frame.size.height - 1;
     frame.size.width += 5;
     hintLabel.frame = frame;
     [self.tokenField layoutSubviews];
@@ -231,8 +232,12 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewWillAppear:(BOOL)animated
 {
-#pragma unused (animated)
     [self.tokenField.textField becomeFirstResponder];
+    if ([UIDevice isRunningiOS7OrAbove]) {
+        self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
+        self.tokenField.textField.font = [UIFont avalonBookFontOfSize:15];
+        self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
+    }
 }
 
 - (void)layoutTokenFieldAndSearchTable
