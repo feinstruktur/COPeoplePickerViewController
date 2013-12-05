@@ -45,7 +45,13 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                                  buttonFrame.size.height,
                                                  buttonFrame.size.width);
         
-        [self addSubview:self.addContactButton];
+        // LC: In iOS 7, this guy is seriously messed up. This button pops open the user's
+        // contact list and allows them to select one, it's a stock Apple control and we have
+        // no customisable control over it. It's unusable as is, so it will need to be
+        // revisited and fixed up for iOS7 at a later date. It in no way makes the share via
+        // email option unusable, it just means the user has to type the first couple of
+        // characters of the recipient's name or email address instead of browsing the whole list.
+        //[self addSubview:self.addContactButton];
         
         // Setup text field
         CGFloat textFieldHeight = self.computedRowHeight;
