@@ -8,6 +8,10 @@
 
 #import "COEmailTableCell.h"
 
+#import "UIFont+Avalon.h"
+#import "UIColor+Blinkbox.h"
+#import "UIView+Shifting.h"
+
 @implementation COEmailTableCell
 
 @synthesize nameLabel = _nameLabel;
@@ -21,16 +25,17 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.nameLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.nameLabel.font = [UIFont boldSystemFontOfSize:16];
+        self.nameLabel.font = [UIFont avalonMediumFontOfSize:16];
+        self.nameLabel.textColor = [UIColor blinkboxDarkGrey];
         self.nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.emailLabelLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailLabelLabel.font = [UIFont boldSystemFontOfSize:14];
+        self.emailLabelLabel.font = [UIFont avalonMediumFontOfSize:14];
         self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
         self.emailLabelLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         
         self.emailAddressLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailAddressLabel.font = [UIFont systemFontOfSize:14];
+        self.emailAddressLabel.font = [UIFont avalonBookFontOfSize:14];
         self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
         self.emailAddressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
@@ -51,7 +56,7 @@
     
     self.nameLabel.frame =
     CGRectMake(leftInset,
-               yInset,
+               yInset + 1,
                CGRectGetWidth(self.bounds) - leftInset * 2,
                CGRectGetHeight(self.bounds) / 2.0 - yInset);
     
