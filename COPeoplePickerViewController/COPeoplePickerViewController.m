@@ -31,8 +31,9 @@ COTokenFieldDelegate,
 ABPeoplePickerNavigationControllerDelegate> {
     
 @private
-    ABAddressBookRef addressBook_;
-    CGRect           keyboardFrame_;
+    ABAddressBookRef _addressBook;
+    CGRect           _keyboardFrame;
+    NSString *       _hint;
 }
 
 @property (nonatomic, strong) COTokenField *tokenField;
@@ -55,12 +56,12 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)initialiseAddressBook
 {
-    keyboardFrame_ = CGRectNull;
+    _keyboardFrame = CGRectNull;
 
     if (ABAddressBookCreateWithOptions != NULL) {
         
         CFErrorRef error = NULL;
-        addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
+        _addressBook = ABAddressBookCreateWithOptions(NULL, &error);
         if (error != NULL) {
             [[[UIAlertView alloc] initWithTitle:@"Oups!"
                                         message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
@@ -68,7 +69,7 @@ ABPeoplePickerNavigationControllerDelegate> {
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil] show];
         } else {
-            ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
+            ABAddressBookRequestAccessWithCompletion(_addressBook, nil);
         }
         
     } else { // remove this case when requiring iOS 6
@@ -76,8 +77,8 @@ ABPeoplePickerNavigationControllerDelegate> {
         addressBook_ = ABAddressBookCreate();
 #endif
         
-        if (addressBook_ == NULL) {
-            [[[UIAlertView alloc] initWithTitle:@"Oups!"
+        if (_addressBook == NULL) {
+            [[[UIAlertView alloc] initWithTitle:@"Oops!"
                                         message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
                                        delegate:nil
                               cancelButtonTitle:@"OK"
@@ -93,15 +94,15 @@ ABPeoplePickerNavigationControllerDelegate> {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.tokenField removeObserver:self forKeyPath:kTokenFieldFrameKeyPath];
     
-    if (addressBook_ != NULL) {
-        CFRelease(addressBook_);
-        addressBook_ = NULL;
+    if (_addressBook != NULL) {
+        CFRelease(_addressBook);
+        _addressBook = NULL;
     }
 }
 
 - (ABAddressBookRef)addressBookRef
 {
-    return addressBook_;
+    return _addressBook;
 }
 
 - (void)done:(id)sender
@@ -202,12 +203,20 @@ ABPeoplePickerNavigationControllerDelegate> {
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    [self updateHint];
 }
 
 - (void)setHint:(NSString *)hint
 {
+    _hint = hint;
+    [self updateHint];
+}
+
+- (void) updateHint
+{
+
     UILabel *hintLabel = self.tokenField.hintLabel;
-    hintLabel.text = hint;
+    hintLabel.text = _hint;
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
@@ -220,7 +229,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (NSString *)hint
 {
-    return self.tokenField.hintLabel.text;
+    return _hint;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -249,8 +258,8 @@ ABPeoplePickerNavigationControllerDelegate> {
         self.tokenFieldScrollView.frame = tokenScrollBounds;
     }];
     
-    if (!CGRectIsNull(keyboardFrame_)) {
-        CGRect keyboardFrame = [self.view convertRect:keyboardFrame_ fromView:nil];
+    if (!CGRectIsNull(_keyboardFrame)) {
+        CGRect keyboardFrame = [self.view convertRect:_keyboardFrame fromView:nil];
         CGRect tableFrame = CGRectMake(0,
                                        CGRectGetMaxY(self.tokenFieldScrollView.frame),
                                        CGRectGetWidth(bounds),
@@ -328,7 +337,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)keyboardDidShow:(NSNotification *)note
 {
-    keyboardFrame_ = [[note userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    _keyboardFrame = [[note userInfo][UIKeyboardFrameEndUserInfoKey] CGRectValue];
     [self layoutTokenFieldAndSearchTable];
 }
 

@@ -6,12 +6,36 @@
 //  Copyright (c) 2013 chocomoko.com. All rights reserved.
 //
 
+/*
+ * Note:  there is something in the design of this and my use of a XIB to load this class that
+ * is a bit broken.  If the XIB indicates a height of 43, when the call to layoutSubviews occurs,
+ * it changes the height back to 42 and (this is where I don't understand the process), the system
+ * changes it back to 43 and a loop ensues.  
+ *
+ * The fix (which is fragile in my mind) is to change the XIB to set the initial height to 42.0
+ * and the loop is removed.  But this is strange, to say the least.
+ */
+
 #import "COTokenField.h"
 #import "COToken.h"
 #import "COPerson.h"
 #import "CORecordEmail.h"
+#import "DDLog.h"
+
+#ifdef DEBUG
+static int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static int ddLogLevel = LOG_LEVEL_WARN;
+#endif
+
 
 const CGFloat kTokenFieldShadowHeight = 14.0;
+
+@interface COTokenField() {
+    NSString * _hint;
+}
+
+@end
 
 @implementation COTokenField
 
@@ -24,99 +48,132 @@ const CGFloat kTokenFieldShadowHeight = 14.0;
 
 static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
+
++ (void)initialize
+{
+    NSNumber *logLevel = [[NSUserDefaults standardUserDefaults] objectForKey:@"LogLevel"];
+    if (logLevel) {
+        ddLogLevel = [logLevel intValue];
+    }
+}
+
+
+- (void) initContents
+{
+    self.tokens = [NSMutableArray new];
+    self.opaque = NO;
+    self.backgroundColor = [UIColor whiteColor];
+    
+    // Setup contact add button
+    self.addContactButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    self.addContactButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+    
+    [self.addContactButton addTarget:self action:@selector(addContact:) forControlEvents:UIControlEventTouchUpInside];
+    
+    CGRect buttonFrame = self.addContactButton.frame;
+    self.addContactButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX,
+                                             CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - kTokenFieldPaddingY,
+                                             buttonFrame.size.height,
+                                             buttonFrame.size.width);
+    
+    [self addSubview:self.addContactButton];
+    
+    // Setup text field
+    CGFloat textFieldHeight = self.computedRowHeight;
+    self.textField = [[UITextField alloc] initWithFrame:CGRectMake(kTokenFieldPaddingX,
+                                                                   (CGRectGetHeight(self.bounds) - textFieldHeight) / 2.0,
+                                                                   CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX * 3.0,
+                                                                   textFieldHeight)];
+    self.textField.opaque = NO;
+    self.textField.backgroundColor = [UIColor clearColor];
+    self.textField.font = [UIFont systemFontOfSize:kTokenFieldFontSize];
+    self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.textField.text = kCOTokenFieldDetectorString;
+    self.textField.delegate = self;
+    
+    UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    hintLabel.font = self.textField.font;
+    hintLabel.textColor = [UIColor grayColor];
+    
+    self.hintLabel = hintLabel;
+    [self addSubview:hintLabel];
+    
+    [self.textField addTarget:self action:@selector(tokenInputChanged:) forControlEvents:UIControlEventEditingChanged];
+    
+    [self addSubview:self.textField];
+    
+    [self setNeedsLayout];
+}
+
+- (void) awakeFromNib
+{
+    [self initContents];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.tokens = [NSMutableArray new];
-        self.opaque = NO;
-        self.backgroundColor = [UIColor whiteColor];
+        [self initContents];
         
-        // Setup contact add button
-        self.addContactButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        self.addContactButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-        
-        [self.addContactButton addTarget:self action:@selector(addContact:) forControlEvents:UIControlEventTouchUpInside];
-        
-        CGRect buttonFrame = self.addContactButton.frame;
-        self.addContactButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX,
-                                                 CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - kTokenFieldPaddingY,
-                                                 buttonFrame.size.height,
-                                                 buttonFrame.size.width);
-        
-        [self addSubview:self.addContactButton];
-        
-        // Setup text field
-        CGFloat textFieldHeight = self.computedRowHeight;
-        self.textField = [[UITextField alloc] initWithFrame:CGRectMake(kTokenFieldPaddingX,
-                                                                       (CGRectGetHeight(self.bounds) - textFieldHeight) / 2.0,
-                                                                       CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX * 3.0,
-                                                                       textFieldHeight)];
-        self.textField.opaque = NO;
-        self.textField.backgroundColor = [UIColor clearColor];
-        self.textField.font = [UIFont systemFontOfSize:kTokenFieldFontSize];
-        self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-        self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.textField.text = kCOTokenFieldDetectorString;
-        self.textField.delegate = self;
-        
-        UILabel *hintLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        hintLabel.font = self.textField.font;
-        hintLabel.textColor = [UIColor grayColor];
-        
-        self.hintLabel = hintLabel;
-        [self addSubview:hintLabel];
-        
-        [self.textField addTarget:self action:@selector(tokenInputChanged:) forControlEvents:UIControlEventEditingChanged];
-        
-        [self addSubview:self.textField];
-        
-        [self setNeedsLayout];
     }
     return self;
 }
 
-- (void)setHint:(NSString *)hint
+- (void) updateHintLabel
 {
     UILabel *hintLabel = self.hintLabel;
-    hintLabel.text = hint;
+    hintLabel.text = _hint;
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
-    frame.origin = CGPointMake(kTokenFieldPaddingX, kTokenFieldPaddingY);
+    frame.origin = CGPointMake(14.0+kTokenFieldPaddingX, kTokenFieldPaddingY);
     frame.size.height = self.textField.frame.size.height;
     frame.size.width += 5;
     hintLabel.frame = frame;
+    
+}
+
+- (void) viewDidLoad
+{
+    [self updateHintLabel];
+}
+
+- (void)setHint:(NSString *)hint
+{
+    _hint = hint;
+    [self updateHintLabel];
 }
 
 - (NSString *)hint
 {
-    return self.hintLabel.text;
+    return _hint;
 }
 
-- (void)addContact:(id)sender {
-#pragma unused (sender)
+- (void)addContact:(id)sender
+{
     id<COTokenFieldDelegate> tokenFieldDelegate = self.tokenFieldDelegate;
     [tokenFieldDelegate tokenFieldDidPressAddContactButton:self];
 }
 
-- (CGFloat)computedRowHeight {
+- (CGFloat)computedRowHeight
+{
     CGFloat buttonHeight = CGRectGetHeight(self.addContactButton.frame);
     return MAX(buttonHeight, (CGFloat)(kTokenFieldPaddingY * 2.0 + kTokenFieldTokenHeight));
 }
 
-- (CGFloat)heightForNumberOfRows:(NSUInteger)rows {
+- (CGFloat)heightForNumberOfRows:(NSUInteger)rows
+{
     return (CGFloat)rows * self.computedRowHeight + (CGFloat)kTokenFieldPaddingY * 2.0f;
 }
 
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     NSUInteger row = 0;
     
     // span of the free space in the last row
     CGFloat left = self.hintLabel.frame.size.width + self.hintLabel.frame.origin.x;
-    CGFloat right =
-    self.frame.size.width -
-    CGRectGetWidth(self.addContactButton.frame) -
-    kTokenFieldPaddingX;
+    CGFloat right = self.frame.size.width - CGRectGetWidth(self.addContactButton.frame) - kTokenFieldPaddingX;
     
     CGFloat rowHeight = self.computedRowHeight;
     
@@ -152,10 +209,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     CGRect textFieldFrame = self.textField.frame;
     
     textFieldFrame.origin.x = left;
-    textFieldFrame.origin.y =
-    row * rowHeight +
-    (rowHeight - CGRectGetHeight(textFieldFrame)) / 2.0f +
-    kTokenFieldPaddingY;
+    textFieldFrame.origin.y = row * rowHeight + (rowHeight - CGRectGetHeight(textFieldFrame)) / 2.0f + kTokenFieldPaddingY;
     
     textFieldFrame.size = CGSizeMake(right - left,
                                      CGRectGetHeight(textFieldFrame));
@@ -170,10 +224,16 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     tokenFieldFrame.size.height = MAX(minHeight,
                                       CGRectGetMaxY(textFieldFrame) + kTokenFieldPaddingY);
     
-    self.frame = tokenFieldFrame;
+    // Update height if newly computed height is different than current height.
+    // This avoids triggering a notification on the change in the 'frame' if the new value is the same as the old
+    if (self.frame.size.height != tokenFieldFrame.size.height) {
+        DDLogInfo(@"frame of TokenField changing height from %f to %f", self.frame.size.height, tokenFieldFrame.size.height);
+        self.frame = tokenFieldFrame;
+    }
 }
 
-- (void)selectToken:(COToken *)token {
+- (void)selectToken:(COToken *)token
+{
     @synchronized (self) {
         if (token != nil) {
             self.textField.hidden = YES;
@@ -190,7 +250,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     }
 }
 
-- (void)removeAllTokens {
+- (void)removeAllTokens
+{
     for (COToken *token in self.tokens) {
         [token removeFromSuperview];
     }
@@ -200,7 +261,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self setNeedsLayout];
 }
 
-- (void)removeToken:(COToken *)token {
+- (void)removeToken:(COToken *)token
+{
     [token removeFromSuperview];
     [self.tokens removeObject:token];
     self.textField.hidden = NO;
@@ -208,7 +270,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self setNeedsLayout];
 }
 
-- (void)modifyToken:(COToken *)token {
+- (void)modifyToken:(COToken *)token
+{
     if (token != nil) {
         if (token == self.selectedToken) {
             [self removeToken:token];
@@ -220,7 +283,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     }
 }
 
-- (void)modifySelectedToken {
+- (void)modifySelectedToken
+{
     COToken *token = self.selectedToken;
     if (token == nil) {
         token = [self.tokens lastObject];
@@ -228,7 +292,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self modifyToken:token];
 }
 
-- (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record {
+- (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record
+{
     COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record container:self];
     [token addTarget:self action:@selector(selectToken:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
@@ -238,12 +303,13 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self setNeedsLayout];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-#pragma unused (touches, event)
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [self selectToken:nil];
 }
 
-- (NSString *)textWithoutDetector {
+- (NSString *)textWithoutDetector
+{
     NSString *text = self.textField.text;
     if (text.length > 0) {
         return [text substringFromIndex:1];
@@ -251,21 +317,21 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     return text;
 }
 
-static BOOL containsString(NSString *haystack, NSString *needle) {
+static BOOL containsString(NSString *haystack, NSString *needle)
+{
     return ([haystack rangeOfString:needle options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch].location != NSNotFound);
 }
 
-- (void)tokenInputChanged:(id)sender {
-#pragma unused (sender)
+- (void)tokenInputChanged:(id)sender
+{
     NSString *searchText = self.textWithoutDetector;
     NSArray *matchedRecords = @[];
-    id<COTokenFieldDelegate> tokenFieldDelegate = self.tokenFieldDelegate;
     if (searchText.length > 2) {
         // Generate new search dict only after a certain delay
         static NSDate *lastUpdated = nil;;
         static NSMutableArray *records = nil;
         if (records == nil || [lastUpdated timeIntervalSinceDate:[NSDate date]] < -10) {
-            ABAddressBookRef ab = [tokenFieldDelegate addressBookForTokenField:self];
+            ABAddressBookRef ab = [_tokenFieldDelegate addressBookForTokenField:self];
             NSArray *people = CFBridgingRelease(ABAddressBookCopyArrayOfAllPeople(ab));
             records = [NSMutableArray new];
             for (id obj in people) {
@@ -277,7 +343,6 @@ static BOOL containsString(NSString *haystack, NSString *needle) {
         }
         
         NSIndexSet *resultSet = [records indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-#pragma unused (idx, stop)
             COPerson *record = (COPerson *)obj;
             if ([record.fullName length] != 0 && containsString(record.fullName, searchText)) {
                 return YES;
@@ -294,16 +359,16 @@ static BOOL containsString(NSString *haystack, NSString *needle) {
         matchedRecords = [records objectsAtIndexes:resultSet];
     }
     
-    [tokenFieldDelegate tokenField:self
+    [_tokenFieldDelegate tokenField:self
               searchingModeChanged:[self.textField.text length] > 1];
     
-    [tokenFieldDelegate tokenField:self updateAddressBookSearchResults:matchedRecords];
+    [_tokenFieldDelegate tokenField:self updateAddressBookSearchResults:matchedRecords];
 }
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-#pragma unused (range)
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
     if (string.length == 0 && [textField.text isEqualToString:kCOTokenFieldDetectorString]) {
         [self modifySelectedToken];
         return NO;
@@ -314,7 +379,8 @@ static BOOL containsString(NSString *haystack, NSString *needle) {
     return YES;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     if (textField.hidden) {
         return NO;
     }

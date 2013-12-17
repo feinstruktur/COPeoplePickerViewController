@@ -25,8 +25,9 @@ extern const CGFloat kTokenFieldShadowHeight;
 
 @end
 
+
 @interface COTokenField : UIView <UITextFieldDelegate>
-@property (nonatomic, weak) id<COTokenFieldDelegate> tokenFieldDelegate;
+@property (nonatomic, weak) IBOutlet id<COTokenFieldDelegate> tokenFieldDelegate;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UILabel *hintLabel;
 @property (nonatomic, strong) NSString *hint;
