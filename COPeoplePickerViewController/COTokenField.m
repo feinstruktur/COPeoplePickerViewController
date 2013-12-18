@@ -326,7 +326,7 @@ static BOOL containsString(NSString *haystack, NSString *needle)
 {
     NSString *searchText = self.textWithoutDetector;
     NSArray *matchedRecords = @[];
-    if (searchText.length > 2) {
+    if (searchText.length > 0) {
         // Generate new search dict only after a certain delay
         static NSDate *lastUpdated = nil;;
         static NSMutableArray *records = nil;
