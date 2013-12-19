@@ -17,13 +17,6 @@ const CGFloat kTokenFieldShadowHeight = 14.0;
 
 @implementation COTokenField
 
-@synthesize tokenFieldDelegate = _tokenFieldDelegate;
-@synthesize textField = _textField;
-@synthesize hintLabel = _hintLabel;
-@synthesize addContactButton = _addContactButton;
-@synthesize tokens = _tokens;
-@synthesize selectedToken = _selectedToken;
-
 static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (id)initWithFrame:(CGRect)frame {
@@ -64,6 +57,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         self.textField.font = [UIFont avalonBookFontOfSize:kTokenFieldFontSize];
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.textField.text = kCOTokenFieldDetectorString;
         self.textField.delegate = self;
         
