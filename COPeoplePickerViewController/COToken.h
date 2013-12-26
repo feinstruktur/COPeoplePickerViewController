@@ -18,10 +18,10 @@ extern const CGFloat kTokenFieldPaddingY;
 @interface COToken : UIButton
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) id associatedObject;
-@property (nonatomic, strong) COTokenField *container;
+//@property (nonatomic, strong) COTokenField *container;
 
 + (COToken *)tokenWithTitle:(NSString *)title
-           associatedObject:(id)obj
-                  container:(COTokenField *)container;
+           associatedObject:(id)obj;
+                  //container:(COTokenField *)container;
 
 @end

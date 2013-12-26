@@ -6,15 +6,6 @@
 //  Copyright (c) 2013 chocomoko.com. All rights reserved.
 //
 
-/*
- * Note:  there is something in the design of this and my use of a XIB to load this class that
- * is a bit broken.  If the XIB indicates a height of 43, when the call to layoutSubviews occurs,
- * it changes the height back to 42 and (this is where I don't understand the process), the system
- * changes it back to 43 and a loop ensues.  
- *
- * The fix (which is fragile in my mind) is to change the XIB to set the initial height to 42.0
- * and the loop is removed.  But this is strange, to say the least.
- */
 
 #import "COTokenField.h"
 #import "COToken.h"
@@ -224,12 +215,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     tokenFieldFrame.size.height = MAX(minHeight,
                                       CGRectGetMaxY(textFieldFrame) + kTokenFieldPaddingY);
     
-    // Update height if newly computed height is different than current height.
-    // This avoids triggering a notification on the change in the 'frame' if the new value is the same as the old
-    if (self.frame.size.height != tokenFieldFrame.size.height) {
-        DDLogInfo(@"frame of TokenField changing height from %f to %f", self.frame.size.height, tokenFieldFrame.size.height);
-        self.frame = tokenFieldFrame;
-    }
+    DDLogInfo(@"frame of TokenField changing height from %f to %f", self.frame.size.height, tokenFieldFrame.size.height);
+    self.frame = tokenFieldFrame;
 }
 
 - (void)selectToken:(COToken *)token
@@ -294,7 +281,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record
 {
-    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record container:self];
+    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record]; // container:self];
     [token addTarget:self action:@selector(selectToken:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
     self.textField.text = kCOTokenFieldDetectorString;

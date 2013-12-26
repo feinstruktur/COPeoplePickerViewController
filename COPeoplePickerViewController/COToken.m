@@ -19,15 +19,15 @@ const CGFloat kTokenFieldPaddingY = 6.0;
 
 @synthesize title = _title;
 @synthesize associatedObject = _associatedObject;
-@synthesize container = _container;
+//@synthesize container = _container;
 
 + (COToken *)tokenWithTitle:(NSString *)title
-           associatedObject:(id)obj
-                  container:(COTokenField *)container
+           associatedObject:(id)obj;
+//                  container:(COTokenField *)container
 {
     COToken *token = [self buttonWithType:UIButtonTypeCustom];
     token.associatedObject = obj;
-    token.container = container;
+//    token.container = container;
     token.backgroundColor = [UIColor clearColor];
     
     UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
