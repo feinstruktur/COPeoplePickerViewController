@@ -16,25 +16,25 @@
     self = [super init];
     if (self) {
         if (emails != NULL) {
-            emails_ = CFRetain(emails);
+            _emails = CFRetain(emails);
         }
-        identifier_ = identifier;
+        _identifier = identifier;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    if (emails_ != NULL) {
-        CFRelease(emails_);
-        emails_ = NULL;
+    if (_emails != NULL) {
+        CFRelease(_emails);
+        _emails = NULL;
     }
 }
 
 - (NSString *)label
 {
     CFStringRef label =
-    ABMultiValueCopyLabelAtIndex(emails_, ABMultiValueGetIndexForIdentifier(emails_, identifier_));
+    ABMultiValueCopyLabelAtIndex(_emails, ABMultiValueGetIndexForIdentifier(_emails, _identifier));
     
     if (label != NULL) {
         CFStringRef localizedLabel = ABAddressBookCopyLocalizedLabel(label);
@@ -46,8 +46,8 @@
 
 - (NSString *)address
 {
-    return CFBridgingRelease(ABMultiValueCopyValueAtIndex(emails_,
-                                                          ABMultiValueGetIndexForIdentifier(emails_, identifier_)));
+    return CFBridgingRelease(ABMultiValueCopyValueAtIndex(_emails,
+                                                          ABMultiValueGetIndexForIdentifier(_emails, _identifier)));
 }
 
 @end

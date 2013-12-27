@@ -11,8 +11,8 @@
 
 @interface CORecordEmail : NSObject {
 @private
-    ABMultiValueRef         emails_;
-    ABMultiValueIdentifier  identifier_;
+    ABMultiValueRef         _emails;
+    ABMultiValueIdentifier  _identifier;
 }
 
 @property (nonatomic, readonly) NSString *label;

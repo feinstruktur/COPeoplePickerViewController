@@ -19,15 +19,12 @@ const CGFloat kTokenFieldPaddingY = 6.0;
 
 @synthesize title = _title;
 @synthesize associatedObject = _associatedObject;
-//@synthesize container = _container;
 
 + (COToken *)tokenWithTitle:(NSString *)title
-           associatedObject:(id)obj;
-//                  container:(COTokenField *)container
+           associatedObject:(id)obj
 {
     COToken *token = [self buttonWithType:UIButtonTypeCustom];
     token.associatedObject = obj;
-//    token.container = container;
     token.backgroundColor = [UIColor clearColor];
     
     UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
@@ -48,7 +45,6 @@ const CGFloat kTokenFieldPaddingY = 6.0;
 
 - (void)drawRect:(CGRect)rect
 {
-#pragma unused (rect)
     CGFloat radius = CGRectGetHeight(self.bounds) / 2.0f;
     
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds

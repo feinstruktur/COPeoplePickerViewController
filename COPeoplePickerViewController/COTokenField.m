@@ -281,7 +281,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record
 {
-    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record]; // container:self];
+    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record]; 
     [token addTarget:self action:@selector(selectToken:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
     self.textField.text = kCOTokenFieldDetectorString;
