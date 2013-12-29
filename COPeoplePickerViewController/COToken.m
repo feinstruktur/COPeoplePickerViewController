@@ -86,9 +86,9 @@ const CGFloat kTokenFieldPaddingY = 6.0;
         [[UIColor colorWithRed:0.667f green:0.757f blue:0.914f alpha:1.0f] set];
     }
     
-    path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.bounds, 0.5, 0.5)
+    path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(self.bounds, 1.5, 1.5)
                                       cornerRadius:radius];
-    [path setLineWidth:1.0];
+    [path setLineWidth:0.5];
     [path stroke];
     
     if (self.highlighted) {
