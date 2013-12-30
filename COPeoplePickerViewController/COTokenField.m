@@ -118,7 +118,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
-    frame.origin = CGPointMake(14.0+kTokenFieldPaddingX, kTokenFieldPaddingY);
+    frame.origin = CGPointMake(kTokenFieldInsetX, kTokenFieldPaddingY);
     frame.size.height = self.textField.frame.size.height;
     frame.size.width += 5;
     hintLabel.frame = frame;
@@ -173,7 +173,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         CGFloat tokenRight = left + CGRectGetWidth(token.bounds);
         if (tokenRight > right) {
             row++;
-            left = kTokenFieldPaddingX;
+            left = kTokenFieldInsetX;
         }
         
         // Adjust token frame
@@ -193,7 +193,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     
     if (right - left < 50) {
         row++;
-        left = kTokenFieldPaddingX;
+        left = kTokenFieldInsetX;
     }
     
     // adjust the text field frame

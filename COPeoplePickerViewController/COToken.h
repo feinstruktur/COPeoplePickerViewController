@@ -10,6 +10,7 @@
 
 extern const CGFloat kTokenFieldFontSize;
 extern const CGFloat kTokenFieldTokenHeight;
+extern const CGFloat kTokenFieldInsetX;
 extern const CGFloat kTokenFieldPaddingX;
 extern const CGFloat kTokenFieldPaddingY;
 

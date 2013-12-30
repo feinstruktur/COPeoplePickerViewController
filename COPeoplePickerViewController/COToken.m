@@ -13,6 +13,7 @@ const CGFloat kTokenFieldFontSize = 14.0;
 static const CGFloat kTokenFieldMaxTokenWidth = 260.0;
 const CGFloat kTokenFieldTokenHeight = (kTokenFieldFontSize + 4.0);
 const CGFloat kTokenFieldPaddingX = 6.0;
+const CGFloat kTokenFieldInsetX = 20;
 const CGFloat kTokenFieldPaddingY = 6.0;
 
 @implementation COToken
