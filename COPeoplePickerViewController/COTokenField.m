@@ -9,8 +9,8 @@
 
 #import "COTokenField.h"
 #import "COToken.h"
-#import "COPerson.h"
-#import "CORecordEmail.h"
+#import "ABContact.h"
+// #import "CORecordEmail.h"
 #import "DDLog.h"
 
 #ifdef DEBUG
@@ -279,9 +279,9 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self modifyToken:token];
 }
 
-- (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record
+- (void)processToken:(NSString *)tokenText associatedRecord:(ABContact *)contact
 {
-    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:record]; 
+    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:contact];
     [token addTarget:self action:@selector(selectToken:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
     self.textField.text = kCOTokenFieldDetectorString;
@@ -323,19 +323,19 @@ static BOOL containsString(NSString *haystack, NSString *needle)
             records = [NSMutableArray new];
             for (id obj in people) {
                 ABRecordRef recordRef = (__bridge CFTypeRef)obj;
-                COPerson *record = [[COPerson alloc] initWithABRecordRef:recordRef];
-                [records addObject:record];
+                ABContact *contact = [ABContact contactWithRecord:recordRef];
+                [records addObject:contact];
             }
             lastUpdated = [NSDate date];
         }
         
         NSIndexSet *resultSet = [records indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            COPerson *record = (COPerson *)obj;
-            if ([record.fullName length] != 0 && containsString(record.fullName, searchText)) {
+            ABContact *contact = (ABContact *)obj;
+            if ([contact.contactName length] != 0 && containsString(contact.contactName, searchText)) {
                 return YES;
             }
-            for (CORecordEmail *email in record.emailAddresses) {
-                if (containsString(email.address, searchText)) {
+            for (NSString *email in contact.emailArray) {
+                if (containsString(email, searchText)) {
                     return YES;
                 }
             }

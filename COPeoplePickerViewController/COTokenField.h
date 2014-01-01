@@ -36,7 +36,7 @@ extern const CGFloat kTokenFieldShadowHeight;
 
 @class COTokenField;
 @class COToken;
-@class COPerson;
+@class ABContact;
 
 @protocol COTokenFieldDelegate <NSObject>
 @required
@@ -66,7 +66,7 @@ extern const CGFloat kTokenFieldShadowHeight;
 - (void)removeToken:(COToken *)token;
 - (void)modifyToken:(COToken *)token;
 - (void)modifySelectedToken;
-- (void)processToken:(NSString *)tokenText associatedRecord:(COPerson *)record;
+- (void)processToken:(NSString *)tokenText associatedRecord:(ABContact *)record;
 - (void)tokenInputChanged:(id)sender;
 
 @end

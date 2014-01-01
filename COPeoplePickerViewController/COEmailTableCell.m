@@ -13,7 +13,7 @@
 @synthesize nameLabel = _nameLabel;
 @synthesize emailLabelLabel = _emailLabelLabel;
 @synthesize emailAddressLabel = _emailAddressLabel;
-@synthesize associatedRecord = _associatedRecord;
+@synthesize associatedContact = _associatedContact;
 
 - (id)initWithStyle:(UITableViewCellStyle)style
     reuseIdentifier:(NSString *)reuseIdentifier {

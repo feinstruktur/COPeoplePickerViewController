@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class COPerson;
+@class ABContact;
 
 @interface COEmailTableCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *emailLabelLabel;
 @property (nonatomic, strong) UILabel *emailAddressLabel;
-@property (nonatomic, strong) COPerson *associatedRecord;
+@property (nonatomic, strong) ABContact *associatedContact;
 
 - (void)adjustLabels;
 
