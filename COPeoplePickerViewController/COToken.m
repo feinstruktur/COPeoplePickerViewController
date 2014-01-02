@@ -57,7 +57,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     CGContextClip(ctx);
     
     NSArray *colors = nil;
-    if (self.highlighted) {
+    if (self.isHighlighted || self.isSelected) {
         colors =
         @[(__bridge id)[UIColor colorWithRed:0.322 green:0.541 blue:0.976 alpha:1.0].CGColor,
           (__bridge id)[UIColor colorWithRed:0.235 green:0.329 blue:0.973 alpha:1.0].CGColor];
@@ -80,7 +80,8 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     CGGradientRelease(gradient);
     CGContextRestoreGState(ctx);
     
-    if (self.highlighted) {
+    NSLog(@"drawing Token with highlighted %@ selected %@", self.isHighlighted ? @"ON" : @"OFF", self.isSelected ? @"ON" : @"OFF");
+    if (self.highlighted || self.selected) {
         [[UIColor colorWithRed:0.275f green:0.478f blue:0.871f alpha:1.0f] set];
     }
     else {
@@ -92,7 +93,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     [path setLineWidth:0.5];
     [path stroke];
     
-    if (self.highlighted) {
+    if (self.isHighlighted || self.isSelected) {
         [[UIColor whiteColor] set];
     }
     else {

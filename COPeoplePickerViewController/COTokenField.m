@@ -219,6 +219,13 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     self.frame = tokenFieldFrame;
 }
 
+- (void) tokenPressed:(COToken *) token
+{
+    DDLogInfo(@"tokenPressd called");
+    [self selectToken:token];
+    [self setNeedsLayout];
+}
+
 - (void)selectToken:(COToken *)token
 {
     @synchronized (self) {
@@ -229,9 +236,16 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
             self.textField.hidden = NO;
             [self.textField becomeFirstResponder];
         }
+        
         self.selectedToken = token;
+        
         for (COToken *t in self.tokens) {
-            t.highlighted = (t == token);
+            if (t == token) {
+                t.selected = YES;
+            } else {
+                t.selected = NO;
+            }
+            DDLogInfo(@"Updated state of token.selected=%@", t.isSelected ?@"ON" : @"OFF");
             [t setNeedsDisplay];
         }
     }
@@ -282,7 +296,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 - (void)processToken:(NSString *)tokenText associatedRecord:(ABContact *)contact
 {
     COToken *token = [COToken tokenWithTitle:tokenText associatedObject:contact];
-    [token addTarget:self action:@selector(selectToken:) forControlEvents:UIControlEventTouchUpInside];
+    [token addTarget:self action:@selector(tokenPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
     self.textField.text = kCOTokenFieldDetectorString;
     id<COTokenFieldDelegate> tokenFieldDelegate = self.tokenFieldDelegate;
