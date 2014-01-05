@@ -66,7 +66,7 @@ extern const CGFloat kTokenFieldShadowHeight;
 - (void)removeToken:(COToken *)token;
 - (void)modifyToken:(COToken *)token;
 - (void)modifySelectedToken;
-- (void)processToken:(NSString *)tokenText associatedRecord:(ABContact *)record;
+- (void)processTokenWithEmailAddress:(NSString *) emailAddress contactName:(NSString *)contactName  associatedRecord:(ABContact *)record;
 - (void)tokenInputChanged:(id)sender;
 
 @end

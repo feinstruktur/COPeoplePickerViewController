@@ -18,18 +18,30 @@ const CGFloat kTokenFieldPaddingY = 6.0;
 
 @implementation COToken
 
-@synthesize title = _title;
+@synthesize contactName = _contactName;
+@synthesize emailAddress = _emailAddress;
 @synthesize associatedObject = _associatedObject;
+@synthesize showName = _showName;
 
-+ (COToken *)tokenWithTitle:(NSString *)title
-           associatedObject:(id)obj
+
++ (COToken *)tokenWithEmailAddress:(NSString *)emailAddress contactName:(NSString *)contactName  associatedObject:(id)obj
+
 {
     COToken *token = [self buttonWithType:UIButtonTypeCustom];
     token.associatedObject = obj;
+    token.contactName = contactName;
+    token.emailAddress = emailAddress;
+    token.accessibilityLabel = token.contactName;
+    
+    // Show contact name if provided, otherwise show email address initially
+    token.showName = contactName != nil;
+
     token.backgroundColor = [UIColor clearColor];
     
     UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
-    CGSize tokenSize = [title sizeWithAttributes:@{NSFontAttributeName:font}];
+    
+    NSString * displayText = token.showName ? token.contactName : token.emailAddress;
+    CGSize tokenSize = [displayText sizeWithAttributes:@{NSFontAttributeName:font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
     
@@ -38,8 +50,6 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     
     token.frame = (CGRect){CGPointZero, tokenSize};
     token.titleLabel.font = font;
-    token.title = title;
-    token.accessibilityLabel = token.title;
     
     return token;
 }
@@ -80,7 +90,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     CGGradientRelease(gradient);
     CGContextRestoreGState(ctx);
     
-    NSLog(@"drawing Token with highlighted %@ selected %@", self.isHighlighted ? @"ON" : @"OFF", self.isSelected ? @"ON" : @"OFF");
+//    NSLog(@"drawing Token with highlighted %@ selected %@", self.isHighlighted ? @"ON" : @"OFF", self.isSelected ? @"ON" : @"OFF");
     if (self.highlighted || self.selected) {
         [[UIColor colorWithRed:0.275f green:0.478f blue:0.871f alpha:1.0f] set];
     }
@@ -99,9 +109,11 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     else {
         [[UIColor blackColor] set];
     }
-    
+
+    NSString * displayText = self.showName ? self.contactName : self.emailAddress;
+
     UIFont *titleFont = [UIFont systemFontOfSize:kTokenFieldFontSize];
-    CGSize titleSize = [self.title sizeWithAttributes:@{NSFontAttributeName:titleFont}];
+    CGSize titleSize = [displayText sizeWithAttributes:@{NSFontAttributeName:titleFont}];
     CGRect titleFrame = CGRectMake((CGRectGetWidth(self.bounds) - titleSize.width) / 2.0f,
                                    (CGRectGetHeight(self.bounds) - titleSize.height) / 2.0f,
                                    titleSize.width,
@@ -110,13 +122,13 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentCenter;
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    [self.title drawInRect:titleFrame withAttributes:@{NSFontAttributeName:titleFont,  NSParagraphStyleAttributeName:paragraphStyle}];
+    [displayText drawInRect:titleFrame withAttributes:@{NSFontAttributeName:titleFont,  NSParagraphStyleAttributeName:paragraphStyle}];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ title: '%@'; associatedObj: '%@'>",
-            NSStringFromClass([self class]), self.title, self.associatedObject];
+    return [NSString stringWithFormat:@"<%@ contactName: '%@'; associatedObj: '%@'>",
+            NSStringFromClass([self class]), self.contactName, self.associatedObject];
 }
 
 @end

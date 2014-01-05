@@ -293,9 +293,9 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self modifyToken:token];
 }
 
-- (void)processToken:(NSString *)tokenText associatedRecord:(ABContact *)contact
+- (void)processTokenWithEmailAddress:(NSString *) emailAddress contactName:(NSString *) contactName  associatedRecord:(ABContact *)contact
 {
-    COToken *token = [COToken tokenWithTitle:tokenText associatedObject:contact];
+    COToken *token = [COToken tokenWithEmailAddress:emailAddress contactName:contactName  associatedObject:contact];
     [token addTarget:self action:@selector(tokenPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.tokens addObject:token];
     self.textField.text = kCOTokenFieldDetectorString;
@@ -387,7 +387,7 @@ static BOOL containsString(NSString *haystack, NSString *needle)
     }
     NSString *text = self.textField.text;
     if ([text length] > 1) {
-        [self processToken:[text substringFromIndex:1] associatedRecord:nil];
+        [self processTokenWithEmailAddress:[text substringFromIndex:1] contactName:nil associatedRecord:nil];
     }
     else {
         return [textField resignFirstResponder];
