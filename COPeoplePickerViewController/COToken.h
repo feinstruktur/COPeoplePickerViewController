@@ -31,6 +31,8 @@ extern const CGFloat kTokenFieldPaddingY;
 @property (nonatomic, strong) id associatedObject;
 @property (nonatomic, assign) BOOL showName;
 
+- (void) toggleDisplayName;
+
 + (COToken *)tokenWithEmailAddress:(NSString *)emailAddress contactName:(NSString *) contactName associatedObject:(id)obj;
 
 @end

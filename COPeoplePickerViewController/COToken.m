@@ -39,19 +39,34 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.backgroundColor = [UIColor clearColor];
     
     UIFont *font = [UIFont systemFontOfSize:kTokenFieldFontSize];
+    token.titleLabel.font = font;
+    [token updateBounds];
     
-    NSString * displayText = token.showName ? token.contactName : token.emailAddress;
-    CGSize tokenSize = [displayText sizeWithAttributes:@{NSFontAttributeName:font}];
+    return token;
+}
+
+- (void) updateBounds
+{
+    NSString * displayText = self.showName ? self.contactName : self.emailAddress;
+    CGSize tokenSize = [displayText sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
     
     tokenSize.height = MIN((CGFloat)kTokenFieldFontSize, tokenSize.height);
     tokenSize.height += kTokenFieldPaddingY * 2.0;
     
-    token.frame = (CGRect){CGPointZero, tokenSize};
-    token.titleLabel.font = font;
-    
-    return token;
+    self.frame = (CGRect){CGPointZero, tokenSize};
+}
+
+- (void) toggleDisplayName
+{
+    //
+    // Only toggle the display name if we have a contactName to display
+    //
+    if (self.contactName != nil) {
+        self.showName = !self.showName;
+    }
+    [self updateBounds];
 }
 
 - (void)drawRect:(CGRect)rect

@@ -239,13 +239,14 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         
         self.selectedToken = token;
         
+        if (token.isSelected) [token toggleDisplayName];
+        
         for (COToken *t in self.tokens) {
             if (t == token) {
                 t.selected = YES;
             } else {
                 t.selected = NO;
             }
-            DDLogInfo(@"Updated state of token.selected=%@", t.isSelected ?@"ON" : @"OFF");
             [t setNeedsDisplay];
         }
     }
