@@ -24,6 +24,7 @@ const CGFloat kTokenFieldShadowHeight = 14.0;
 
 @interface COTokenField() {
     NSString * _hint;
+    BOOL _compactMode;
 }
 
 @end
@@ -53,6 +54,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 {
     self.tokens = [NSMutableArray new];
     self.opaque = NO;
+    _compactMode = YES;
     self.backgroundColor = [UIColor whiteColor];
     
     // Setup contact add button
@@ -160,6 +162,26 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void)layoutSubviews
 {
+    if (_compactMode) {
+        [self layoutCompactedSubviews];
+    } else {
+        [self layoutExpandedSubviews];
+    }
+}
+
+- (void) layoutCompactedSubviews
+{
+    DDLogInfo(@"layoutCompactedView");
+//    DDLogInfo(@"%@",[NSThread callStackSymbols]);
+    for (COToken * token in self.tokens) {
+        [token removeFromSuperview];
+    }
+}
+
+- (void) layoutExpandedSubviews
+{
+    DDLogInfo(@"layoutExpandedView");
+    
     NSUInteger row = 0;
     
     // span of the free space in the last row
@@ -393,6 +415,22 @@ static BOOL containsString(NSString *haystack, NSString *needle)
     else {
         return [textField resignFirstResponder];
     }
+    return YES;
+}
+
+#pragma - Keyboard Notifications
+
+- (BOOL) textFieldShouldBeginEditing:(UITextField *) textField
+{
+    _compactMode = NO;
+    [self setNeedsLayout];
+    return YES;
+}
+
+- (BOOL) textFieldShouldEndEditing:(UITextField *) textField
+{
+    _compactMode = YES;
+    [self setNeedsLayout];
     return YES;
 }
 

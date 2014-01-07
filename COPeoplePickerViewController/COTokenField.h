@@ -27,6 +27,12 @@
  *   interacting with the AddressBook
  * - searchingModeChanged is reported to the delegate when the field enters searching (a character is typed) and when 
  *   the user finalizing selecting a token (by calling processToken:associatedRecord)
+ *
+ *
+ * To better emulate the iOS7 behavior, I have added a new mode to this view; compactMode.  
+ * In 'compactMode', the display is only one line high and will truncate names with 'and x more' if the
+ * list is too long for one line.  This is not an externally controlled mode.
+ *
  */
 
 #import <UIKit/UIKit.h>
@@ -45,7 +51,6 @@ extern const CGFloat kTokenFieldShadowHeight;
 - (ABAddressBookRef)addressBookForTokenField:(COTokenField *)tokenField;
 - (void)tokenField:(COTokenField *)tokenField updateAddressBookSearchResults:(NSArray *)records;
 - (void)tokenField:(COTokenField *)tokenField searchingModeChanged:(BOOL)isInSearchingMode;
-
 @end
 
 
