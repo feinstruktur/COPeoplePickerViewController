@@ -45,9 +45,16 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     return token;
 }
 
+- (NSString *) displayString
+{
+    if (self.contactName == nil) return self.emailAddress;
+    
+    return self.showName ? self.contactName : self.emailAddress;
+}
+
 - (void) updateBounds
 {
-    NSString * displayText = self.showName ? self.contactName : self.emailAddress;
+    NSString * displayText = [self displayString];
     CGSize tokenSize = [displayText sizeWithAttributes:@{NSFontAttributeName:self.titleLabel.font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;

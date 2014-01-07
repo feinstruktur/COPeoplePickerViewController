@@ -65,7 +65,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     
     CGRect buttonFrame = self.addContactButton.frame;
     self.addContactButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX,
-                                             CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - kTokenFieldPaddingY,
+                                             CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - kTokenFieldPaddingY-6,
                                              buttonFrame.size.height,
                                              buttonFrame.size.width);
     
@@ -172,10 +172,53 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 - (void) layoutCompactedSubviews
 {
     DDLogInfo(@"layoutCompactedView");
-//    DDLogInfo(@"%@",[NSThread callStackSymbols]);
+
     for (COToken * token in self.tokens) {
         [token removeFromSuperview];
     }
+    
+    NSMutableString * names = [[NSMutableString alloc] init];
+    NSString * displayText;
+    BOOL insertComma = NO;
+    NSInteger nameCount = [self.tokens count];
+    
+    for (COToken * token in self.tokens) {
+        NSString * separationString = insertComma ? @", " : @"";
+        NSString * previousNames = [names copy];
+        [names appendFormat:@"%@%@", separationString, [token displayString]];
+        //
+        // Make sure this the name is not too long
+        //
+        _textField.text = names;
+        [_textField sizeToFit];
+        
+        if ((_textField.frame.size.height > 44) || (_textField.frame.size.width > 150)) {
+            if (nameCount == 1) displayText = [previousNames stringByAppendingString:@" and 1 other"];
+            else displayText = [previousNames stringByAppendingFormat:@" and %d others", nameCount];
+            break;
+        }
+        insertComma = YES;
+        --nameCount;
+        displayText = names;
+    }
+    
+    // adjust the text field frame
+    CGFloat left = self.hintLabel.frame.size.width + self.hintLabel.frame.origin.x;
+    CGRect textFieldFrame = self.textField.frame;
+    
+    textFieldFrame.origin.x = left;
+    textFieldFrame.origin.y = kTokenFieldPaddingY;
+    
+    textFieldFrame.size = CGSizeMake(self.frame.size.width - left,
+                                     self.computedRowHeight);
+    
+    _textField.text = displayText;
+    _textField.frame = textFieldFrame;
+    _textField.hidden = NO;
+    
+    CGRect frame = self.frame;
+    frame.size.height = textFieldFrame.size.height + 1.5*kTokenFieldPaddingY;
+    self.frame = frame;
 }
 
 - (void) layoutExpandedSubviews
@@ -384,7 +427,7 @@ static BOOL containsString(NSString *haystack, NSString *needle)
     }
     
     [_tokenFieldDelegate tokenField:self
-              searchingModeChanged:[self.textField.text length] > 1];
+              searchingModeChanged:[self.textField.text length] > 0];
     
     [_tokenFieldDelegate tokenField:self updateAddressBookSearchResults:matchedRecords];
 }
@@ -423,6 +466,7 @@ static BOOL containsString(NSString *haystack, NSString *needle)
 - (BOOL) textFieldShouldBeginEditing:(UITextField *) textField
 {
     _compactMode = NO;
+    _textField.text = kCOTokenFieldDetectorString;
     [self setNeedsLayout];
     return YES;
 }

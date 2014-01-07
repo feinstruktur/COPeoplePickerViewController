@@ -32,6 +32,7 @@ extern const CGFloat kTokenFieldPaddingY;
 @property (nonatomic, assign) BOOL showName;
 
 - (void) toggleDisplayName;
+- (NSString *) displayString; // String to display, based on toggled display name setting
 
 + (COToken *)tokenWithEmailAddress:(NSString *)emailAddress contactName:(NSString *) contactName associatedObject:(id)obj;
 
