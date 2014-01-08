@@ -10,7 +10,6 @@
 #import "COTokenField.h"
 #import "COToken.h"
 #import "ABContact.h"
-// #import "CORecordEmail.h"
 #import "DDLog.h"
 
 #ifdef DEBUG
@@ -172,8 +171,6 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void) layoutCompactedSubviews
 {
-    DDLogInfo(@"layoutCompactedView");
-
     self.addContactButton.hidden = YES;
 
     for (COToken * token in self.tokens) {
@@ -226,8 +223,6 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 
 - (void) layoutExpandedSubviews
 {
-    DDLogInfo(@"layoutExpandedView");
-    
     self.addContactButton.hidden = NO;
     
     NSUInteger row = 0;
@@ -282,13 +277,11 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     tokenFieldFrame.size.height = MAX(minHeight,
                                       CGRectGetMaxY(textFieldFrame) + kTokenFieldPaddingY);
     
-    DDLogInfo(@"frame of TokenField changing height from %f to %f", self.frame.size.height, tokenFieldFrame.size.height);
     self.frame = tokenFieldFrame;
 }
 
 - (void) tokenPressed:(COToken *) token
 {
-    DDLogInfo(@"tokenPressd called");
     [self selectToken:token];
     [self setNeedsLayout];
 }
