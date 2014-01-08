@@ -9,7 +9,7 @@
 #import "COToken.h"
 #import "COTokenField.h"
 
-const CGFloat kTokenFieldFontSize = 14.0;
+const CGFloat kTokenFieldFontSize = 13.0;
 static const CGFloat kTokenFieldMaxTokenWidth = 260.0;
 const CGFloat kTokenFieldTokenHeight = (kTokenFieldFontSize + 4.0);
 const CGFloat kTokenFieldPaddingX = 6.0;
@@ -112,7 +112,6 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     CGGradientRelease(gradient);
     CGContextRestoreGState(ctx);
     
-//    NSLog(@"drawing Token with highlighted %@ selected %@", self.isHighlighted ? @"ON" : @"OFF", self.isSelected ? @"ON" : @"OFF");
     if (self.highlighted || self.selected) {
         [[UIColor colorWithRed:0.275f green:0.478f blue:0.871f alpha:1.0f] set];
     }
@@ -132,7 +131,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
         [[UIColor blackColor] set];
     }
 
-    NSString * displayText = self.showName ? self.contactName : self.emailAddress;
+    NSString * displayText = [self displayString];
 
     UIFont *titleFont = [UIFont systemFontOfSize:kTokenFieldFontSize];
     CGSize titleSize = [displayText sizeWithAttributes:@{NSFontAttributeName:titleFont}];
@@ -145,12 +144,6 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     [displayText drawInRect:titleFrame withAttributes:@{NSFontAttributeName:titleFont,  NSParagraphStyleAttributeName:paragraphStyle}];
-}
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"<%@ contactName: '%@'; associatedObj: '%@'>",
-            NSStringFromClass([self class]), self.contactName, self.associatedObject];
 }
 
 @end

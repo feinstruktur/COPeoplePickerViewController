@@ -64,8 +64,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     [self.addContactButton addTarget:self action:@selector(addContact:) forControlEvents:UIControlEventTouchUpInside];
     
     CGRect buttonFrame = self.addContactButton.frame;
-    self.addContactButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX,
-                                             CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - kTokenFieldPaddingY-6,
+    self.addContactButton.frame = CGRectMake(CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - 2*kTokenFieldPaddingX,
+                                             CGRectGetHeight(self.bounds) - CGRectGetHeight(buttonFrame) - 2*kTokenFieldPaddingY,
                                              buttonFrame.size.height,
                                              buttonFrame.size.width);
     
@@ -193,8 +193,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         [_textField sizeToFit];
         
         if ((_textField.frame.size.height > 44) || (_textField.frame.size.width > 150)) {
-            if (nameCount == 1) displayText = [previousNames stringByAppendingString:@" and 1 other"];
-            else displayText = [previousNames stringByAppendingFormat:@" and %d others", nameCount];
+            if (nameCount == 1) displayText = [previousNames stringByAppendingString:@", and 1 other"];
+            else displayText = [previousNames stringByAppendingFormat:@", and %d others", nameCount];
             break;
         }
         insertComma = YES;
@@ -229,7 +229,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
     
     // span of the free space in the last row
     CGFloat left = self.hintLabel.frame.size.width + self.hintLabel.frame.origin.x;
-    CGFloat right = self.frame.size.width - CGRectGetWidth(self.addContactButton.frame) - kTokenFieldPaddingX;
+    CGFloat right = self.frame.size.width - CGRectGetWidth(self.addContactButton.frame) - 2*kTokenFieldPaddingX;
     
     CGFloat rowHeight = self.computedRowHeight;
     
@@ -244,10 +244,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         // Adjust token frame
         CGRect tokenFrame = token.frame;
         tokenFrame.origin.x = left;
-        tokenFrame.origin.y =
-        row * rowHeight +
-        (rowHeight - CGRectGetHeight(tokenFrame)) / 2.0f +
-        kTokenFieldPaddingY;
+        tokenFrame.origin.y = row * rowHeight + (rowHeight - CGRectGetHeight(tokenFrame)) / 2.0f + kTokenFieldPaddingY;
         
         token.frame = tokenFrame;
         
@@ -256,7 +253,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         [self addSubview:token];
     }
     
-    if (right - left < 50) {
+    if (right - left < 60) {
         row++;
         left = kTokenFieldInsetX;
     }
