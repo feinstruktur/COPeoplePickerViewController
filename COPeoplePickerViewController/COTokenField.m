@@ -70,6 +70,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                              buttonFrame.size.width);
     
     [self addSubview:self.addContactButton];
+    self.addContactButton.hidden = YES;
     
     // Setup text field
     CGFloat textFieldHeight = self.computedRowHeight;
@@ -173,6 +174,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 {
     DDLogInfo(@"layoutCompactedView");
 
+    self.addContactButton.hidden = YES;
+
     for (COToken * token in self.tokens) {
         [token removeFromSuperview];
     }
@@ -224,6 +227,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
 - (void) layoutExpandedSubviews
 {
     DDLogInfo(@"layoutExpandedView");
+    
+    self.addContactButton.hidden = NO;
     
     NSUInteger row = 0;
     
