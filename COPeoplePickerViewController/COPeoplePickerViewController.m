@@ -20,7 +20,7 @@
 #import "CORecordEmail.h"
 
 #import "UIDevice+We7.h"
-#import "UIFont+Avalon.h"
+#import "UIFont+Blinkbox.h"
 #import "UIColor+Blinkbox.h"
 
 #define kTokenFieldFrameKeyPath @"frame"
@@ -213,7 +213,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     UILabel *hintLabel = self.tokenField.hintLabel;
     hintLabel.text = hint;
-    hintLabel.font = [UIFont avalonBookFontOfSize:15];
+    hintLabel.font = [UIFont blinkboxBookFontOfSize:15];
     hintLabel.textColor = [UIColor blinkboxDarkGrey];
     [hintLabel sizeToFit];
     
@@ -235,7 +235,7 @@ ABPeoplePickerNavigationControllerDelegate> {
     [self.tokenField.textField becomeFirstResponder];
     if ([UIDevice isRunningiOS7OrAbove]) {
         self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
-        self.tokenField.textField.font = [UIFont avalonBookFontOfSize:15];
+        self.tokenField.textField.font = [UIFont blinkboxBookFontOfSize:15];
         self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
     }
 }

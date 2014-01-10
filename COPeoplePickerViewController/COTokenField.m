@@ -11,7 +11,7 @@
 #import "COPerson.h"
 #import "CORecordEmail.h"
 
-#import "UIFont+Avalon.h"
+#import "UIFont+Blinkbox.h"
 
 const CGFloat kTokenFieldShadowHeight = 14.0;
 
@@ -54,7 +54,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                                                        textFieldHeight)];
         self.textField.opaque = NO;
         self.textField.backgroundColor = [UIColor clearColor];
-        self.textField.font = [UIFont avalonBookFontOfSize:kTokenFieldFontSize];
+        self.textField.font = [UIFont blinkboxBookFontOfSize:kTokenFieldFontSize];
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
