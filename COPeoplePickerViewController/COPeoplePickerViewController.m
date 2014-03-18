@@ -134,10 +134,10 @@ ABPeoplePickerNavigationControllerDelegate> {
     [self initialiseAddressBook];
     
     // Configure content view
-    self.view.backgroundColor = [UIColor colorWithRed:0.859
-                                                green:0.886
-                                                 blue:0.925
-                                                alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0.859f
+                                                green:0.886f
+                                                 blue:0.925f
+                                                alpha:1.0f];
     
     // Configure token field
     CGRect viewBounds = self.view.bounds;
@@ -185,10 +185,10 @@ ABPeoplePickerNavigationControllerDelegate> {
                                         CGRectGetWidth(self.view.bounds),
                                         kTokenFieldShadowHeight);
     
-    self.shadowLayer.colors = @[(__bridge id)[UIColor colorWithWhite:0.0 alpha:0.3].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.3].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.1].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.0].CGColor];
+    self.shadowLayer.colors = @[(__bridge id)[UIColor colorWithWhite:0.0f alpha:0.3f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.3f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.1f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.0f].CGColor];
     
     self.shadowLayer.locations = @[@0.0,
                                    @(1.0/kTokenFieldShadowHeight),
