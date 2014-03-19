@@ -64,13 +64,13 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     NSArray *colors = nil;
     if (self.highlighted) {
         colors =
-        @[(__bridge id)[UIColor colorWithRed:0.322 green:0.541 blue:0.976 alpha:1.0].CGColor,
-          (__bridge id)[UIColor colorWithRed:0.235 green:0.329 blue:0.973 alpha:1.0].CGColor];
+        @[(__bridge id)[UIColor colorWithRed:0.322f green:0.541f blue:0.976f alpha:1.0f].CGColor,
+          (__bridge id)[UIColor colorWithRed:0.235f green:0.329f blue:0.973f alpha:1.0f].CGColor];
     }
     else {
         colors =
-        @[(__bridge id)[UIColor colorWithRed:0.863 green:0.902 blue:0.969 alpha:1.0].CGColor,
-          (__bridge id)[UIColor colorWithRed:0.741 green:0.808 blue:0.937 alpha:1.0].CGColor];
+        @[(__bridge id)[UIColor colorWithRed:0.863f green:0.902f blue:0.969f alpha:1.0f].CGColor,
+          (__bridge id)[UIColor colorWithRed:0.741f green:0.808f blue:0.937f alpha:1.0f].CGColor];
     }
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();

@@ -49,8 +49,8 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
         // Setup text field
         CGFloat textFieldHeight = self.computedRowHeight;
         self.textField = [[UITextField alloc] initWithFrame:CGRectMake(kTokenFieldPaddingX,
-                                                                       (CGRectGetHeight(self.bounds) - textFieldHeight) / 2.0,
-                                                                       CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX * 3.0,
+                                                                       (CGRectGetHeight(self.bounds) - textFieldHeight) / 2.0f,
+                                                                       CGRectGetWidth(self.bounds) - CGRectGetWidth(buttonFrame) - kTokenFieldPaddingX * 3.0f,
                                                                        textFieldHeight)];
         self.textField.opaque = NO;
         self.textField.backgroundColor = [UIColor clearColor];

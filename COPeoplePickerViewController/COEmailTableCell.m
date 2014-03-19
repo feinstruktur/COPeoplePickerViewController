@@ -31,12 +31,12 @@
         
         self.emailLabelLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.emailLabelLabel.font = [UIFont blinkboxMediumFontOfSize:14];
-        self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailLabelLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         
         self.emailAddressLabel = [[UILabel alloc] initWithFrame:self.bounds];
         self.emailAddressLabel.font = [UIFont blinkboxBookFontOfSize:14];
-        self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailAddressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self addSubview:self.nameLabel];
@@ -58,19 +58,19 @@
     CGRectMake(leftInset,
                yInset + 1,
                CGRectGetWidth(self.bounds) - leftInset * 2,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
     
     self.emailLabelLabel.frame =
     CGRectMake(leftInset,
                CGRectGetMaxY(self.nameLabel.frame),
                labelWidth,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
     
     self.emailAddressLabel.frame =
     CGRectMake(labelWidth + leftInset * 2,
                CGRectGetMaxY(self.nameLabel.frame),
                CGRectGetWidth(self.bounds) - labelWidth - leftInset * 3,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
 }
 
 @end
