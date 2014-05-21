@@ -233,11 +233,9 @@ ABPeoplePickerNavigationControllerDelegate> {
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.tokenField.textField becomeFirstResponder];
-    if ([UIDevice isRunningiOS7OrAbove]) {
-        self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
-        self.tokenField.textField.font = [UIFont blinkboxBookFontOfSize:15];
-        self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
-    }
+    self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
+    self.tokenField.textField.font = [UIFont blinkboxBookFontOfSize:15];
+    self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
 }
 
 - (void)layoutTokenFieldAndSearchTable
