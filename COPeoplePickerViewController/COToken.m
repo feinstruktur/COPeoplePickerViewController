@@ -14,7 +14,7 @@
 const CGFloat kTokenFieldFontSize = 14.0;
 static const CGFloat kTokenFieldMaxTokenWidth = 260.0;
 const CGFloat kTokenFieldTokenHeight = (kTokenFieldFontSize + 4.0);
-const CGFloat kTokenFieldPaddingX = 6.0;
+const CGFloat kTokenFieldPaddingX = 12.0;
 const CGFloat kTokenFieldPaddingY = 6.0;
 
 @implementation COToken
@@ -32,7 +32,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.container = container;
     token.backgroundColor = [UIColor clearColor];
     
-    UIFont *font = [UIFont blinkboxBookFontOfSize:14];
+    UIFont *font = [UIFont bb_lolaRegularWithSize:14];
     CGSize tokenSize = [title sizeWithAttributes:@{NSFontAttributeName : font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
@@ -104,7 +104,7 @@ const CGFloat kTokenFieldPaddingY = 6.0;
         [[UIColor blackColor] set];
     }
     
-    UIFont *titleFont = [UIFont blinkboxBookFontOfSize:14];
+    UIFont *titleFont = [UIFont bb_lolaRegularWithSize:14];
     CGSize titleSize = [self.title sizeWithAttributes:@{NSFontAttributeName : titleFont}];
     CGRect titleFrame = CGRectMake((CGRectGetWidth(self.bounds) - titleSize.width) / 2.0f,
                                    (CGRectGetHeight(self.bounds) - titleSize.height) / 2.0f,

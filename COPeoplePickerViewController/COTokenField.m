@@ -54,7 +54,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                                                        textFieldHeight)];
         self.textField.opaque = NO;
         self.textField.backgroundColor = [UIColor clearColor];
-        self.textField.font = [UIFont blinkboxBookFontOfSize:kTokenFieldFontSize];
+        self.textField.font = [UIFont bb_lolaRegularWithSize:kTokenFieldFontSize];
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;

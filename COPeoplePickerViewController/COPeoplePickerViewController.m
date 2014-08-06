@@ -213,13 +213,13 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     UILabel *hintLabel = self.tokenField.hintLabel;
     hintLabel.text = hint;
-    hintLabel.font = [UIFont blinkboxBookFontOfSize:15];
-    hintLabel.textColor = [UIColor blinkboxDarkGrey];
+    hintLabel.font = [UIFont bb_lolaMediumWithSize:17];
+    hintLabel.textColor = [UIColor bb_gray];
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
     frame.origin = CGPointMake(kTokenFieldPaddingX, kTokenFieldPaddingY);
-    frame.size.height = self.tokenField.textField.frame.size.height - 1;
+    frame.size.height = self.tokenField.textField.frame.size.height + 1;
     frame.size.width += 5;
     hintLabel.frame = frame;
     [self.tokenField layoutSubviews];
@@ -233,9 +233,9 @@ ABPeoplePickerNavigationControllerDelegate> {
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.tokenField.textField becomeFirstResponder];
-    self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
-    self.tokenField.textField.font = [UIFont blinkboxBookFontOfSize:15];
-    self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
+    self.tokenField.textField.tintColor = [UIColor bb_pink];
+    self.tokenField.textField.font = [UIFont bb_lolaMediumWithSize:15];
+    self.tokenField.textField.textColor = [UIColor bb_darkGray];
 }
 
 - (void)layoutTokenFieldAndSearchTable
