@@ -25,17 +25,17 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.nameLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.nameLabel.font = [UIFont blinkboxMediumFontOfSize:16];
-        self.nameLabel.textColor = [UIColor blinkboxDarkGrey];
+        self.nameLabel.font = [UIFont bb_lolaMediumWithSize:16];
+        self.nameLabel.textColor = [UIColor bb_darkGray];
         self.nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.emailLabelLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailLabelLabel.font = [UIFont blinkboxMediumFontOfSize:14];
+        self.emailLabelLabel.font = [UIFont bb_lolaMediumWithSize:14];
         self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailLabelLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         
         self.emailAddressLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailAddressLabel.font = [UIFont blinkboxBookFontOfSize:14];
+        self.emailAddressLabel.font = [UIFont bb_lolaRegularWithSize:14];
         self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailAddressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
