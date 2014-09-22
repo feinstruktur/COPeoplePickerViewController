@@ -131,6 +131,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     [self initialiseAddressBook];
     
     // Configure content view
@@ -232,6 +233,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.tokenField.textField becomeFirstResponder];
     self.tokenField.textField.tintColor = [UIColor bb_pink];
     self.tokenField.textField.font = [UIFont bb_lolaMediumWithSize:15];
