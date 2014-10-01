@@ -210,6 +210,11 @@ ABPeoplePickerNavigationControllerDelegate> {
                                                object:nil];
 }
 
+- (NSString *)textWithoutDetector
+{
+    return self.tokenField.textWithoutDetector;
+}
+
 - (void)setHint:(NSString *)hint
 {
     UILabel *hintLabel = self.tokenField.hintLabel;

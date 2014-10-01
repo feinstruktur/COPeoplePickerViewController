@@ -40,6 +40,8 @@ extern NSString *const COPeoplePickerViewControllerVisibleHeightChanged;
  */
 @property (nonatomic, readonly) NSArray *selectedRecords;
 
+@property (nonatomic, readonly) NSString *textWithoutDetector;
+
 @property (nonatomic) NSString *hint;
 
 /*!
