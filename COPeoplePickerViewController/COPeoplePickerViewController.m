@@ -291,7 +291,10 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (CGFloat)visibleHeight
 {
-    CGFloat height = self.tokenField.frame.size.height;
+    // Use `tokenFieldScrollView` instead of `tokenField`
+    // because `tokenField` is constrained to 5 lines
+    // and it's content starts to scroll when it exceeds 5 lines.
+    CGFloat height = self.tokenFieldScrollView.frame.size.height;
     
     if (!self.searchTableView.hidden) {
         height += self.searchTableView.frame.size.height;
