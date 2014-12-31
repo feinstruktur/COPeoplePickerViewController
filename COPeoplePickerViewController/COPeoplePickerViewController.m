@@ -19,7 +19,7 @@
 #import "COEmailTableCell.h"
 #import "CORecordEmail.h"
 
-#import "UIDevice+We7.h"
+#import <BlinkboxToolbox/BlinkboxToolbox.h>
 #import "UIFont+Blinkbox.h"
 #import "UIColor+Blinkbox.h"
 
