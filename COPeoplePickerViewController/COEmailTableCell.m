@@ -25,18 +25,18 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.nameLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.nameLabel.font = [UIFont blinkboxMediumFontOfSize:16];
-        self.nameLabel.textColor = [UIColor blinkboxDarkGrey];
+        self.nameLabel.font = [UIFont bb_lolaMediumWithSize:16];
+        self.nameLabel.textColor = [UIColor bb_darkGray];
         self.nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.emailLabelLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailLabelLabel.font = [UIFont blinkboxMediumFontOfSize:14];
-        self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        self.emailLabelLabel.font = [UIFont bb_lolaMediumWithSize:14];
+        self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailLabelLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         
         self.emailAddressLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailAddressLabel.font = [UIFont blinkboxBookFontOfSize:14];
-        self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        self.emailAddressLabel.font = [UIFont bb_lolaRegularWithSize:14];
+        self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
         self.emailAddressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self addSubview:self.nameLabel];
@@ -49,7 +49,9 @@
 }
 
 - (void)adjustLabels {
-    CGSize emailLabelSize = [self.emailLabelLabel.text sizeWithFont:self.emailLabelLabel.font];
+    CGSize emailLabelSize =
+    [self.emailLabelLabel.text sizeWithAttributes:@{NSFontAttributeName : self.emailLabelLabel.font}];
+    
     CGFloat leftInset = 8;
     CGFloat yInset = 4;
     CGFloat labelWidth = emailLabelSize.width;
@@ -58,19 +60,19 @@
     CGRectMake(leftInset,
                yInset + 1,
                CGRectGetWidth(self.bounds) - leftInset * 2,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
     
     self.emailLabelLabel.frame =
     CGRectMake(leftInset,
                CGRectGetMaxY(self.nameLabel.frame),
                labelWidth,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
     
     self.emailAddressLabel.frame =
     CGRectMake(labelWidth + leftInset * 2,
                CGRectGetMaxY(self.nameLabel.frame),
                CGRectGetWidth(self.bounds) - labelWidth - leftInset * 3,
-               CGRectGetHeight(self.bounds) / 2.0 - yInset);
+               CGRectGetHeight(self.bounds) / 2.0f - yInset);
 }
 
 @end
