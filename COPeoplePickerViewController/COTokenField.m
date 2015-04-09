@@ -11,7 +11,7 @@
 #import "COPerson.h"
 #import "CORecordEmail.h"
 
-#import "UIFont+Blinkbox.h"
+#import "PIETheme.h"
 
 const CGFloat kTokenFieldShadowHeight = 14.0;
 
@@ -54,7 +54,7 @@ static NSString *kCOTokenFieldDetectorString = @"\u200B";
                                                                        textFieldHeight)];
         self.textField.opaque = NO;
         self.textField.backgroundColor = [UIColor clearColor];
-        self.textField.font = [UIFont bb_lolaRegularWithSize:kTokenFieldFontSize];
+        self.textField.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
         self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         self.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
