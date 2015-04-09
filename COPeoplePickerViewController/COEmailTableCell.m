@@ -8,9 +8,7 @@
 
 #import "COEmailTableCell.h"
 
-#import "UIFont+Blinkbox.h"
-#import "UIColor+Blinkbox.h"
-#import "UIView+Shifting.h"
+#import "PIETheme.h"
 
 @implementation COEmailTableCell
 
@@ -25,18 +23,18 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.nameLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.nameLabel.font = [UIFont bb_lolaMediumWithSize:16];
-        self.nameLabel.textColor = [UIColor bb_darkGray];
+        self.nameLabel.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+        self.nameLabel.textColor = [PIETheme brandTundora];
         self.nameLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.emailLabelLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailLabelLabel.font = [UIFont bb_lolaMediumWithSize:14];
-        self.emailLabelLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
+        self.emailLabelLabel.font = [PIETheme brandFont:PIEFontTypeC3 weight:PIEFontWeightL];
+        self.emailLabelLabel.textColor = [PIETheme brandGrey];
         self.emailLabelLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
         
         self.emailAddressLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.emailAddressLabel.font = [UIFont bb_lolaRegularWithSize:14];
-        self.emailAddressLabel.textColor = [UIColor colorWithWhite:0.4f alpha:1.0f];
+        self.emailAddressLabel.font = [PIETheme brandFont:PIEFontTypeC3 weight:PIEFontWeightL];
+        self.emailAddressLabel.textColor = [PIETheme brandGrey];
         self.emailAddressLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [self addSubview:self.nameLabel];

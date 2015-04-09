@@ -20,8 +20,7 @@
 #import "CORecordEmail.h"
 
 #import <BlinkboxToolbox/BlinkboxToolbox.h>
-#import "UIFont+Blinkbox.h"
-#import "UIColor+Blinkbox.h"
+#import "PIETheme.h"
 
 #define kTokenFieldFrameKeyPath @"frame"
 
@@ -219,8 +218,8 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     UILabel *hintLabel = self.tokenField.hintLabel;
     hintLabel.text = hint;
-    hintLabel.font = [UIFont bb_lolaMediumWithSize:17];
-    hintLabel.textColor = [UIColor bb_gray];
+    hintLabel.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+    hintLabel.textColor = [PIETheme brandGrey];
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
@@ -240,9 +239,9 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     [super viewWillAppear:animated];
     [self.tokenField.textField becomeFirstResponder];
-    self.tokenField.textField.tintColor = [UIColor bb_pink];
-    self.tokenField.textField.font = [UIFont bb_lolaMediumWithSize:15];
-    self.tokenField.textField.textColor = [UIColor bb_darkGray];
+    self.tokenField.textField.tintColor = [PIETheme brandCrimson];
+    self.tokenField.textField.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+    self.tokenField.textField.textColor = [PIETheme brandTundora];
 }
 
 - (void)layoutTokenFieldAndSearchTable
