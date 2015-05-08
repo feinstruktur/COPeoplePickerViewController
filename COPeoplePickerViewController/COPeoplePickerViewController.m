@@ -221,7 +221,7 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     [super viewWillAppear:animated];
     [self.tokenField.textField becomeFirstResponder];
-    self.tokenField.textField.tintColor = [PIETheme brandCrimson];
+    self.tokenField.textField.tintColor = [PIETheme brandRose];
     self.tokenField.textField.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
     self.tokenField.textField.textColor = [PIETheme brandTundora];
 }
