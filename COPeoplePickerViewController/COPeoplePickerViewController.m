@@ -19,9 +19,8 @@
 #import "COEmailTableCell.h"
 #import "CORecordEmail.h"
 
-#import "UIDevice+We7.h"
-#import "UIFont+Blinkbox.h"
-#import "UIColor+Blinkbox.h"
+#import <BlinkboxToolbox/BlinkboxToolbox.h>
+#import "PIETheme.h"
 
 #define kTokenFieldFrameKeyPath @"frame"
 
@@ -61,35 +60,17 @@ ABPeoplePickerNavigationControllerDelegate> {
 {
     keyboardFrame_ = CGRectNull;
 
-    if (ABAddressBookCreateWithOptions != NULL) {
-        
-        CFErrorRef error = NULL;
-        addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
-        if (error != NULL) {
-            [[[UIAlertView alloc] initWithTitle:@"Oups!"
-                                        message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil] show];
-        } else {
-            ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
-        }
-        
-    } else { // remove this case when requiring iOS 6
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
-        addressBook_ = ABAddressBookCreate();
-#endif
-        
-        if (addressBook_ == NULL) {
-            [[[UIAlertView alloc] initWithTitle:@"Oups!"
-                                        message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil] show];
-        }
-        
+    CFErrorRef error = NULL;
+    addressBook_ = ABAddressBookCreateWithOptions(NULL, &error);
+    if (error != NULL) {
+        [[[UIAlertView alloc] initWithTitle:@"Oups!"
+                                    message:NSLocalizedString(@"Cannot access the address book. Please allow the app to access your contact book to easily pick your contacts.", nil)
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+    } else {
+        ABAddressBookRequestAccessWithCompletion(addressBook_, nil);
     }
-
 }
 
 - (void)dealloc
@@ -131,13 +112,14 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     [self initialiseAddressBook];
     
     // Configure content view
-    self.view.backgroundColor = [UIColor colorWithRed:0.859
-                                                green:0.886
-                                                 blue:0.925
-                                                alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0.859f
+                                                green:0.886f
+                                                 blue:0.925f
+                                                alpha:1.0f];
     
     // Configure token field
     CGRect viewBounds = self.view.bounds;
@@ -185,10 +167,10 @@ ABPeoplePickerNavigationControllerDelegate> {
                                         CGRectGetWidth(self.view.bounds),
                                         kTokenFieldShadowHeight);
     
-    self.shadowLayer.colors = @[(__bridge id)[UIColor colorWithWhite:0.0 alpha:0.3].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.3].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.1].CGColor,
-                                (__bridge id)[UIColor colorWithWhite:0.0 alpha:0.0].CGColor];
+    self.shadowLayer.colors = @[(__bridge id)[UIColor colorWithWhite:0.0f alpha:0.3f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.3f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.1f].CGColor,
+                                (__bridge id)[UIColor colorWithWhite:0.0f alpha:0.0f].CGColor];
     
     self.shadowLayer.locations = @[@0.0,
                                    @(1.0/kTokenFieldShadowHeight),
@@ -209,17 +191,22 @@ ABPeoplePickerNavigationControllerDelegate> {
                                                object:nil];
 }
 
+- (NSString *)textWithoutDetector
+{
+    return self.tokenField.textWithoutDetector;
+}
+
 - (void)setHint:(NSString *)hint
 {
     UILabel *hintLabel = self.tokenField.hintLabel;
     hintLabel.text = hint;
-    hintLabel.font = [UIFont blinkboxBookFontOfSize:15];
-    hintLabel.textColor = [UIColor blinkboxDarkGrey];
+    hintLabel.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+    hintLabel.textColor = [PIETheme brandGrey];
     [hintLabel sizeToFit];
     
     CGRect frame = hintLabel.frame;
     frame.origin = CGPointMake(kTokenFieldPaddingX, kTokenFieldPaddingY);
-    frame.size.height = self.tokenField.textField.frame.size.height - 1;
+    frame.size.height = self.tokenField.textField.frame.size.height + 1;
     frame.size.width += 5;
     hintLabel.frame = frame;
     [self.tokenField layoutSubviews];
@@ -232,12 +219,11 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.tokenField.textField becomeFirstResponder];
-    if ([UIDevice isRunningiOS7OrAbove]) {
-        self.tokenField.textField.tintColor = [UIColor blinkboxDarkGrey];
-        self.tokenField.textField.font = [UIFont blinkboxBookFontOfSize:15];
-        self.tokenField.textField.textColor = [UIColor blinkboxDarkGrey];
-    }
+    self.tokenField.textField.tintColor = [PIETheme brandRose];
+    self.tokenField.textField.font = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+    self.tokenField.textField.textColor = [PIETheme brandTundora];
 }
 
 - (void)layoutTokenFieldAndSearchTable
@@ -286,7 +272,10 @@ ABPeoplePickerNavigationControllerDelegate> {
 
 - (CGFloat)visibleHeight
 {
-    CGFloat height = self.tokenField.frame.size.height;
+    // Use `tokenFieldScrollView` instead of `tokenField`
+    // because `tokenField` is constrained to 5 lines
+    // and it's content starts to scroll when it exceeds 5 lines.
+    CGFloat height = self.tokenFieldScrollView.frame.size.height;
     
     if (!self.searchTableView.hidden) {
         height += self.searchTableView.frame.size.height;

@@ -8,13 +8,12 @@
 
 #import "COToken.h"
 #import "COTokenField.h"
-
-#import "UIFont+Blinkbox.h"
+#import "PIETheme.h"
 
 const CGFloat kTokenFieldFontSize = 14.0;
 static const CGFloat kTokenFieldMaxTokenWidth = 260.0;
 const CGFloat kTokenFieldTokenHeight = (kTokenFieldFontSize + 4.0);
-const CGFloat kTokenFieldPaddingX = 6.0;
+const CGFloat kTokenFieldPaddingX = 12.0;
 const CGFloat kTokenFieldPaddingY = 6.0;
 
 @implementation COToken
@@ -32,8 +31,8 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     token.container = container;
     token.backgroundColor = [UIColor clearColor];
     
-    UIFont *font = [UIFont blinkboxBookFontOfSize:14];
-    CGSize tokenSize = [title sizeWithFont:font];
+    UIFont *font = [PIETheme brandFont:PIEFontTypeC3 weight:PIEFontWeightL];
+    CGSize tokenSize = [title sizeWithAttributes:@{NSFontAttributeName : font}];
     tokenSize.width = MIN((CGFloat)kTokenFieldMaxTokenWidth, tokenSize.width);
     tokenSize.width += kTokenFieldPaddingX * 2.0;
     
@@ -64,13 +63,13 @@ const CGFloat kTokenFieldPaddingY = 6.0;
     NSArray *colors = nil;
     if (self.highlighted) {
         colors =
-        @[(__bridge id)[UIColor colorWithRed:0.322 green:0.541 blue:0.976 alpha:1.0].CGColor,
-          (__bridge id)[UIColor colorWithRed:0.235 green:0.329 blue:0.973 alpha:1.0].CGColor];
+        @[(__bridge id)[UIColor colorWithRed:0.322f green:0.541f blue:0.976f alpha:1.0f].CGColor,
+          (__bridge id)[UIColor colorWithRed:0.235f green:0.329f blue:0.973f alpha:1.0f].CGColor];
     }
     else {
         colors =
-        @[(__bridge id)[UIColor colorWithRed:0.863 green:0.902 blue:0.969 alpha:1.0].CGColor,
-          (__bridge id)[UIColor colorWithRed:0.741 green:0.808 blue:0.937 alpha:1.0].CGColor];
+        @[(__bridge id)[UIColor colorWithRed:0.863f green:0.902f blue:0.969f alpha:1.0f].CGColor,
+          (__bridge id)[UIColor colorWithRed:0.741f green:0.808f blue:0.937f alpha:1.0f].CGColor];
     }
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -104,17 +103,15 @@ const CGFloat kTokenFieldPaddingY = 6.0;
         [[UIColor blackColor] set];
     }
     
-    UIFont *titleFont = [UIFont blinkboxBookFontOfSize:14];
-    CGSize titleSize = [self.title sizeWithFont:titleFont];
+    UIFont *titleFont = [PIETheme brandFont:PIEFontTypeH5 weight:PIEFontWeightM];
+    CGSize titleSize = [self.title sizeWithAttributes:@{NSFontAttributeName : titleFont}];
     CGRect titleFrame = CGRectMake((CGRectGetWidth(self.bounds) - titleSize.width) / 2.0f,
                                    (CGRectGetHeight(self.bounds) - titleSize.height) / 2.0f,
                                    titleSize.width,
                                    titleSize.height);
     
     [self.title drawInRect:titleFrame
-                  withFont:titleFont
-             lineBreakMode:NSLineBreakByTruncatingTail
-                 alignment:NSTextAlignmentCenter];
+            withAttributes:@{NSFontAttributeName : titleFont}];
 }
 
 - (NSString *)description
